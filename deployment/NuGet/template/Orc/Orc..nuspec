@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Orc.</id>
+    <version>[VERSION]</version>
+    <title>Orc.</title>
+    <authors>WildGums</authors>
+    <owners>WildGums</owners>
+
+	<description>
+	  Orc. description.
+	</description>
+	<summary>
+	</summary>
+
+	<tags></tags>
+
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright WildGums 2015 - 2016</copyright>
+
+	<language>en-US</language>
+	<projectUrl>https://github.com/WildGums/Orc.Memento</projectUrl>
+	<!--<licenseUrl>http://catel.codeplex.com/license</licenseUrl>-->
+	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
+    
+    <dependencies>
+      <!-- <dependency id="Catel.Core" version="[replaced]" /> -->
+    </dependencies>
+  </metadata>
+</package>
