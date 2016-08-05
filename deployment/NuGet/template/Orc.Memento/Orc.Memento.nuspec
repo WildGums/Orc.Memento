@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>Orc.</id>
+    <id>Orc.Memento</id>
     <version>[VERSION]</version>
-    <title>Orc.</title>
+    <title>Orc.Memento</title>
     <authors>WildGums</authors>
     <owners>WildGums</owners>
 
 	<description>
-	  Orc. description.
+	  Easily add the memento pattern to your apps.
 	</description>
 	<summary>
 	</summary>
@@ -24,7 +24,7 @@
 	<!--<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>-->
     
     <dependencies>
-      <!-- <dependency id="Catel.Core" version="[replaced]" /> -->
+      <dependency id="Catel.Core" version="[replaced]" />
     </dependencies>
   </metadata>
 </package>
