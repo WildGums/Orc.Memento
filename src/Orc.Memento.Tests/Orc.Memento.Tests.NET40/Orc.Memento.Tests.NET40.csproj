@@ -27,7 +27,8 @@
     <DefineConstants>TRACE;DEBUG;NET;NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\debug\NET40\Orc.Memento.Tests\Orc.Memento.Tests.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,7 +37,8 @@
     <DefineConstants>TRACE;NET;NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\NET40\Orc.Memento.Tests\Orc.Memento.Tests.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Core, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -99,16 +101,16 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Orc.Memento\Orc.Memento.NET40\Orc.Memento.NET40.csproj">
-      <Project>{22b2a860-9cb2-44de-9c68-b497bf356cfa}</Project>
-      <Name>Orc.Memento.NET40</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModuleInitializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Orc.Memento\Orc.Memento.NET40\Orc.Memento.NET40.csproj">
+      <Project>{073a2955-e973-4749-9e47-c07d8c8dd6a3}</Project>
+      <Name>Orc.Memento.NET40</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

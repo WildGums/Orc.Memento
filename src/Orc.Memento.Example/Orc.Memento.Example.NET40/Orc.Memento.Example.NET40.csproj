@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{fa9fd4f9-4229-4f25-909a-e81d78109212}</ProjectGuid>
+    <ProjectGuid>{FA9FD4F9-4229-4F25-909A-E81D78109212}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orc.Memento.Example</RootNamespace>
@@ -108,12 +108,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Orc.Memento\Orc.Memento.NET40\Orc.Memento.NET40.csproj">
-      <Project>{22b2a860-9cb2-44de-9c68-b497bf356cfa}</Project>
-      <Name>Orc.Memento.NET40</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +119,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModuleInitializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Orc.Memento\Orc.Memento.NET40\Orc.Memento.NET40.csproj">
+      <Project>{073a2955-e973-4749-9e47-c07d8c8dd6a3}</Project>
+      <Name>Orc.Memento.NET40</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
