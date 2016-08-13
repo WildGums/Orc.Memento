@@ -221,6 +221,40 @@ namespace Orc.Memento.Tests
                 Assert.IsTrue(mementoService.CanUndo);
                 Assert.IsFalse(mementoService.CanRedo);
             }
+
+            [TestCase(1)]
+            [TestCase(3)]
+            [TestCase(6)]
+            public void RaisesUpdatedEvent(int actionsCount)
+            {
+                var mementoService = new MementoService();
+                var raisedEventsCount = 0;
+                mementoService.Updated += (sender, args) => 
+                {
+                    if(args.MementoAction == MementoAction.Redo)
+                    {
+                        raisedEventsCount++;
+                    }
+                };
+
+                for (var i = 0; i < actionsCount; i++)
+                {
+                    mementoService.Add(new MockUndo(true));
+                }
+
+                for (var i = 0; i < actionsCount; i++)
+                {
+                    mementoService.Undo();
+                }
+
+                for (var i = 0; i < actionsCount; i++)
+                {
+                    mementoService.Redo();
+                }
+
+                Assert.AreEqual(actionsCount, raisedEventsCount);
+            }
+
             #endregion
         }
         #endregion
@@ -275,6 +309,34 @@ namespace Orc.Memento.Tests
 
                 mementoService.Undo();
                 Assert.IsFalse(mementoService.CanUndo);
+            }
+
+            [TestCase(1)]
+            [TestCase(3)]
+            [TestCase(6)]
+            public void RaisesUpdatedEvent(int actionsCount)
+            {
+                var mementoService = new MementoService();
+                var raisedEventsCount = 0;
+                mementoService.Updated += (sender, args) =>
+                {
+                    if (args.MementoAction == MementoAction.Undo)
+                    {
+                        raisedEventsCount++;
+                    }
+                };
+
+                for (var i = 0; i < actionsCount; i++)
+                {
+                    mementoService.Add(new MockUndo(true));
+                }
+
+                for (var i = 0; i < actionsCount; i++)
+                {
+                    mementoService.Undo();
+                }
+
+                Assert.AreEqual(actionsCount, raisedEventsCount);
             }
             #endregion
         }

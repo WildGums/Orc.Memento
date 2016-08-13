@@ -19,6 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Actions\PropertyChangeUndo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Actions\UndoBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\IgnoreMementoSupportAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\MementoAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\MementoEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Observers\CollectionObserver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Observers\ObjectObserver.cs" />

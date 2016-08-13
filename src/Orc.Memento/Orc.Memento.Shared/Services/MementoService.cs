@@ -41,11 +41,6 @@ namespace Orc.Memento
         private Batch _currentBatch;
 
         private readonly Dictionary<object, ObserverBase> _observers = new Dictionary<object, ObserverBase>();
-
-        /// <summary>
-        /// The static instance of the memento service.
-        /// </summary>
-        private static readonly IMementoService _instance = new MementoService();
         #endregion
 
         #region Constructors
@@ -77,10 +72,7 @@ namespace Orc.Memento
         /// Gets the default instance of the memento service.
         /// </summary>
         /// <value>The default instance.</value>
-        public static IMementoService Default
-        {
-            get { return _instance; }
-        }
+        public static IMementoService Default { get; } = new MementoService();
 
         /// <summary>
         /// Gets or sets the maximum number of supported batches.
@@ -242,51 +234,55 @@ namespace Orc.Memento
         /// <returns><c>true</c> if an undo was executed; otherwise <c>false</c>.</returns>
         public bool Undo()
         {
-            if (CanUndo)
+            if (!CanUndo)
             {
-                IMementoBatch undo = null;
+                return false;
+            }
 
-                lock (_lock)
+            IMementoBatch undo = null;
+
+            lock (_lock)
+            {
+                if (_undoBatches.Count > 0)
                 {
-                    if (_undoBatches.Count > 0)
-                    {
-                        _isUndoingOperation = true;
-
-                        undo = _undoBatches.First();
-                        _undoBatches.RemoveFirst();
-                    }
-                }
-
-                if (undo != null)
-                {
-                    try
-                    {
-                        undo.Undo();
-                        if (undo.CanRedo)
-                        {
-                            lock (_lock)
-                            {
-                                _redoBatches.Insert(0, undo);
-                                while (_redoBatches.Count > _maximumSupportedOperations)
-                                {
-                                    _redoBatches.RemoveLast();
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    finally
-                    {
-                        lock (_lock)
-                        {
-                            _isUndoingOperation = false;
-                        }
-                    }
+                    undo = _undoBatches.First();
+                    _undoBatches.RemoveFirst();
                 }
             }
 
-            return false;
+            if (undo == null)
+            {
+                return false;
+            }
+
+            _isUndoingOperation = true;
+
+            try
+            {
+                undo.Undo();
+                if (undo.CanRedo)
+                {
+                    lock (_lock)
+                    {
+                        _redoBatches.Insert(0, undo);
+                        while (_redoBatches.Count > _maximumSupportedOperations)
+                        {
+                            _redoBatches.RemoveLast();
+                        }
+                    }
+                }
+
+                Updated?.Invoke(this, new MementoEventArgs(MementoAction.Undo));
+
+                return true;
+            }
+            finally
+            {
+                lock (_lock)
+                {
+                    _isUndoingOperation = false;
+                }
+            }
         }
 
         /// <summary>
@@ -295,47 +291,52 @@ namespace Orc.Memento
         /// <returns><c>true</c> if a redo operation occurred; otherwise <c>false</c>.</returns>
         public bool Redo()
         {
-            if (CanRedo)
+            if (!CanRedo)
             {
-                IMementoBatch undo = null;
+                return false;
+            }
 
-                lock (_lock)
-                {
-                    if (_redoBatches.Count > 0)
-                    {
-                        _isUndoingOperation = true;
-                        undo = _redoBatches.First();
-                        _redoBatches.RemoveFirst();
-                    }
-                }
+            IMementoBatch undo = null;
 
-                if (undo != null && undo.CanRedo)
-                {
-                    try
-                    {
-                        undo.Redo();
-                        lock (_lock)
-                        {
-                            _undoBatches.Insert(0, undo);
-                            while (_undoBatches.Count > _maximumSupportedOperations)
-                            {
-                                _undoBatches.RemoveLast();
-                            }
-                        }
-
-                        return true;
-                    }
-                    finally
-                    {
-                        lock (_lock)
-                        {
-                            _isUndoingOperation = false;
-                        }
-                    }
+            lock (_lock)
+            {
+                if (_redoBatches.Count > 0)
+                {                        
+                    undo = _redoBatches.First();
+                    _redoBatches.RemoveFirst();
                 }
             }
 
-            return false;
+            if (undo == null || !undo.CanRedo)
+            {
+                return false;
+            }
+
+            _isUndoingOperation = true;
+
+            try
+            {
+                undo.Redo();
+                lock (_lock)
+                {
+                    _undoBatches.Insert(0, undo);
+                    while (_undoBatches.Count > _maximumSupportedOperations)
+                    {
+                        _undoBatches.RemoveLast();
+                    }
+                }
+
+                Updated?.Invoke(this, new MementoEventArgs(MementoAction.Redo));
+
+                return true;
+            }
+            finally
+            {
+                lock (_lock)
+                {
+                    _isUndoingOperation = false;
+                }
+            }
         }
 
         /// <summary>
@@ -543,19 +544,23 @@ namespace Orc.Memento
         {
             Argument.IsNotNull("obj", obj);
 
-            if (list != null)
+            if (list == null)
             {
-                for (int i = 0; i < list.Count; i++)
+                return;
+            }
+
+            for (var i = 0; i < list.Count; i++)
+            {
+                var batch = list[i] as Batch;
+                if (batch == null)
                 {
-                    var batch = list[i] as Batch;
-                    if (batch != null)
-                    {
-                        batch.ClearActionsForObject(obj);
-                        if (batch.IsEmptyBatch)
-                        {
-                            list.RemoveAt(i--);
-                        }
-                    }
+                    continue;
+                }
+
+                batch.ClearActionsForObject(obj);
+                if (batch.IsEmptyBatch)
+                {
+                    list.RemoveAt(i--);
                 }
             }
         }
@@ -577,15 +582,8 @@ namespace Orc.Memento
 
             lock (_lock)
             {
-                if (_undoBatches != null)
-                {
-                    _undoBatches.Clear();
-                }
-
-                if (_redoBatches != null)
-                {
-                    _redoBatches.Clear();
-                }
+                _undoBatches?.Clear();
+                _redoBatches?.Clear();
 
                 _isUndoingOperation = false;
             }
@@ -593,5 +591,7 @@ namespace Orc.Memento
             Log.Debug("Cleared all actions");
         }
         #endregion
+
+        public event EventHandler<MementoEventArgs> Updated;
     }
 }

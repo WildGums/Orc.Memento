@@ -155,5 +155,10 @@ namespace Orc.Memento
         /// <param name="instance">The instance to clear the events for. If <c>null</c>, all events will be removed.</param>
         void Clear(object instance = null);
         #endregion
+
+        /// <summary>
+        /// The Updated event
+        /// </summary>
+        event EventHandler<MementoEventArgs> Updated;
     }
 }
