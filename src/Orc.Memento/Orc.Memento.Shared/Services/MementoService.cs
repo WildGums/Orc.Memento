@@ -236,8 +236,11 @@ namespace Orc.Memento
         {
             if (!CanUndo)
             {
+                Log.Info("Cannot undo action");
                 return false;
             }
+
+            Log.Debug("Undoing action");
 
             IMementoBatch undo = null;
 
@@ -252,6 +255,7 @@ namespace Orc.Memento
 
             if (undo == null)
             {
+                Log.Info("Cannot undo for there is no undo batch for this action");
                 return false;
             }
 
@@ -274,6 +278,7 @@ namespace Orc.Memento
 
                 Updated?.Invoke(this, new MementoEventArgs(MementoAction.Undo));
 
+                Log.Debug("Successfully undoed action");
                 return true;
             }
             finally
@@ -293,8 +298,11 @@ namespace Orc.Memento
         {
             if (!CanRedo)
             {
+                Log.Info("Cannot redo action");
                 return false;
             }
+
+            Log.Debug("Redoing action");
 
             IMementoBatch undo = null;
 
@@ -309,6 +317,7 @@ namespace Orc.Memento
 
             if (undo == null || !undo.CanRedo)
             {
+                Log.Info("Cannot redo action for there is no redo batch for this action");
                 return false;
             }
 
@@ -328,6 +337,7 @@ namespace Orc.Memento
 
                 Updated?.Invoke(this, new MementoEventArgs(MementoAction.Redo));
 
+                Log.Debug("Successfully redoed action");
                 return true;
             }
             finally
