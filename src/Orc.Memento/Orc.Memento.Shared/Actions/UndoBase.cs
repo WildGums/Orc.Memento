@@ -77,7 +77,7 @@ namespace Orc.Memento
 
             UndoAction();
 
-            Log.Debug("Undoed action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+            Log.Debug("Undone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Orc.Memento
 
             RedoAction();
 
-            Log.Debug("Redoed action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+            Log.Debug("Redone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
         }
         #endregion
 

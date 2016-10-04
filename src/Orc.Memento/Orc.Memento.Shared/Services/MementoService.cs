@@ -278,7 +278,7 @@ namespace Orc.Memento
 
                 Updated?.Invoke(this, new MementoEventArgs(MementoAction.Undo));
 
-                Log.Debug("Successfully undoed action");
+                Log.Debug("Action is successfully undone");
                 return true;
             }
             finally
@@ -337,7 +337,7 @@ namespace Orc.Memento
 
                 Updated?.Invoke(this, new MementoEventArgs(MementoAction.Redo));
 
-                Log.Debug("Successfully redoed action");
+                Log.Debug("Action is successfully redone");
                 return true;
             }
             finally
