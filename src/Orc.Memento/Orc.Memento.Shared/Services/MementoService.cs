@@ -317,7 +317,7 @@ namespace Orc.Memento
 
             if (undo == null || !undo.CanRedo)
             {
-                Log.Info("Cannot redo because there is no undo batch for this action");
+                Log.Info("Cannot redo because there is no redo batch for this action");
                 return false;
             }
 
