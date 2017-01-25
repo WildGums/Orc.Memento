@@ -23,8 +23,11 @@ namespace Orc.Memento.Tests.Mocks
             get { return _value; }
             set
             {
-                _value = value;
-                RaisePropertyChanged(() => Value);
+                if (!string.Equals(_value, value))
+                {
+                    _value = value;
+                    RaisePropertyChanged(nameof(Value));
+                }
             }
         }
         #endregion

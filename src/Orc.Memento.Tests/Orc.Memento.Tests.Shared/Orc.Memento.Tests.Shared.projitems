@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionUndoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BatchFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CollectionChangeUndoFacts.cs" />
