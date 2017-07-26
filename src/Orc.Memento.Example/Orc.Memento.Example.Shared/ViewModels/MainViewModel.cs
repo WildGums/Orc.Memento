@@ -18,6 +18,7 @@ namespace Orc.Memento.ViewModels
     {
         public MainViewModel()
         {
+            Title = "Orc.Memento example";
         }
 
         #region Properties

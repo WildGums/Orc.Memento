@@ -1,19 +1,20 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.NET40", "Orc.Memento\Orc.Memento.NET40\Orc.Memento.NET40.csproj", "{073A2955-E973-4749-9E47-C07D8C8DD6A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.NET47", "Orc.Memento\Orc.Memento.NET47\Orc.Memento.NET47.csproj", "{073A2955-E973-4749-9E47-C07D8C8DD6A3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{1FE0D431-A761-4239-B2D6-D32C70723FD2}"
 	ProjectSection(SolutionItems) = preProject
+		GlobalSuppressions.cs = GlobalSuppressions.cs
 		nuget.config = nuget.config
 		Orc.Memento.sln.DotSettings = Orc.Memento.sln.DotSettings
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Tests.NET40", "Orc.Memento.Tests\Orc.Memento.Tests.NET40\Orc.Memento.Tests.NET40.csproj", "{287C7549-E333-4E3F-9B40-4236A374630D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Tests.NET47", "Orc.Memento.Tests\Orc.Memento.Tests.NET47\Orc.Memento.Tests.NET47.csproj", "{287C7549-E333-4E3F-9B40-4236A374630D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0787DFC6-AB24-4D00-A8A4-FF203DC7D080}"
 EndProject
@@ -29,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Tests.NET45", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{672BFA2E-9F93-496F-B188-40579FB5D301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Example.NET40", "Orc.Memento.Example\Orc.Memento.Example.NET40\Orc.Memento.Example.NET40.csproj", "{FA9FD4F9-4229-4F25-909A-E81D78109212}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Example.NET47", "Orc.Memento.Example\Orc.Memento.Example.NET47\Orc.Memento.Example.NET47.csproj", "{FA9FD4F9-4229-4F25-909A-E81D78109212}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.Memento.Example.Shared", "Orc.Memento.Example\Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.shproj", "{22B2A860-9CB2-44DE-9C68-B497BF356CFA}"
 EndProject
