@@ -120,7 +120,7 @@ namespace Orc.Memento
         /// </summary>
         public void Undo()
         {
-            foreach (var action in _actions)
+            foreach (var action in _actions.Reverse<IMementoSupport>())
             {
                 action.Undo();
             }
