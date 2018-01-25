@@ -338,6 +338,7 @@ namespace Orc.Memento.Tests
 
                 Assert.AreEqual(actionsCount, raisedEventsCount);
             }
+
             #endregion
         }
         #endregion
@@ -387,5 +388,28 @@ namespace Orc.Memento.Tests
             #endregion
         }
         #endregion
+
+        [TestCase]
+        public void UndoBatches()
+        {
+            var model = new MockModel();
+            var mementoService = new MementoService();
+            mementoService.RegisterObject(model);
+
+            string originalNumber = model.Value;
+
+            mementoService.BeginBatch();
+
+            model.Value = "1000";
+            model.Value = "100";
+            model.Value = "10";
+
+            IMementoBatch mementoBatch = mementoService.EndBatch();
+
+            mementoBatch.Undo();
+
+            Assert.AreEqual(originalNumber, model.Value);
+        }
+
     }
 }

@@ -10,11 +10,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionUndoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BatchFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CollectionChangeUndoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CollectionObserverFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.approvaltests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MementoServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockCatelModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mocks\MockModel.cs" />
@@ -24,5 +25,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyChangeUndoFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PublicApiFacts.cs" />
   </ItemGroup>
 </Project>
