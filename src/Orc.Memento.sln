@@ -29,15 +29,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.Memento.Example.Shared"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Memento.Example.NET", "Orc.Memento.Example.NET\Orc.Memento.Example.NET.csproj", "{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.Memento.Tests.Shared", "Orc.Memento.Tests.Shared\Orc.Memento.Tests.Shared.shproj", "{E4D948A3-E0E7-47CC-85D1-622883E5D18A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Tests.NET", "Orc.Memento.Tests.NET\Orc.Memento.Tests.NET.csproj", "{7A8490B8-790F-4193-B254-A98E744671A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Memento.Tests", "Orc.Memento.Tests\Orc.Memento.Tests.csproj", "{7A04BF3F-D9DC-4959-A130-5D587A7459FB}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.projitems*{22b2a860-9cb2-44de-9c68-b497bf356cfa}*SharedItemsImports = 13
-		Orc.Memento.Tests.Shared\Orc.Memento.Tests.Shared.projitems*{7a8490b8-790f-4193-b254-a98e744671a1}*SharedItemsImports = 4
-		Orc.Memento.Tests.Shared\Orc.Memento.Tests.Shared.projitems*{e4d948a3-e0e7-47cc-85d1-622883e5d18a}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,10 +48,10 @@ Global
 		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A8490B8-790F-4193-B254-A98E744671A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A8490B8-790F-4193-B254-A98E744671A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A8490B8-790F-4193-B254-A98E744671A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A8490B8-790F-4193-B254-A98E744671A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,8 +63,7 @@ Global
 		{E0370049-54DB-46B4-A6EF-CF6AF3A8A568} = {0787DFC6-AB24-4D00-A8A4-FF203DC7D080}
 		{22B2A860-9CB2-44DE-9C68-B497BF356CFA} = {672BFA2E-9F93-496F-B188-40579FB5D301}
 		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E} = {672BFA2E-9F93-496F-B188-40579FB5D301}
-		{E4D948A3-E0E7-47CC-85D1-622883E5D18A} = {D3EA1078-BF3D-4709-871C-AAFF70B95045}
-		{7A8490B8-790F-4193-B254-A98E744671A1} = {D3EA1078-BF3D-4709-871C-AAFF70B95045}
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB} = {D3EA1078-BF3D-4709-871C-AAFF70B95045}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7CD1B54A-2F0F-43A4-9A73-673ABF8E170A}
