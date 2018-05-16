@@ -9,7 +9,7 @@ namespace Orc.Memento.Tests
 {
     using System;
     using System.Linq;
-    using Catel.Test;
+    using Catel.Tests;
     using NUnit.Framework;
 
     public class ObjectObserverFacts

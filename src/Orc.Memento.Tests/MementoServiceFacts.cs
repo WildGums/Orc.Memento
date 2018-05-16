@@ -10,7 +10,7 @@ namespace Orc.Memento.Tests
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Catel.Test;
+    using Catel.Tests;
     using Mocks;
     using NUnit.Framework;
 

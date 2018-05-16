@@ -10,7 +10,7 @@ namespace Orc.Memento.Tests
     using System;
     using System.Collections.Generic;
     using Catel.Collections;
-    using Catel.Test;
+    using Catel.Tests;
     using NUnit.Framework;
 
     public class CollectionChangeUndoFacts

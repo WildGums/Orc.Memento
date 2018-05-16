@@ -8,7 +8,7 @@
 namespace Orc.Memento.Tests
 {
     using System;
-    using Catel.Test;
+    using Catel.Tests;
     using Mocks;
     using NUnit.Framework;
 
