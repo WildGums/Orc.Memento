@@ -4,6 +4,7 @@
     <AssemblyName>Orc.Memento.Example.NET</AssemblyName>
     <RootNamespace>Orc.Memento.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
+    <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
 
   <PropertyGroup>
