@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net46;net47;uap10.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net46;net47;netstandard2.0</TargetFrameworks>
     <AssemblyName>Orc.Memento</AssemblyName>
     <RootNamespace>Orc.Memento</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -10,6 +10,11 @@
     <PackageTags>orc;memento;undo;redo</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- SonarQube requires a project guid -->
+    <ProjectGuid>7073B93B-7BE9-4AB6-BF0C-813F0491F32A</ProjectGuid>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Catel.Core" Version="5.5.0-beta0000" />
     <PackageReference Include="Catel.Fody" Version="3.3.0" PrivateAssets="all" />
