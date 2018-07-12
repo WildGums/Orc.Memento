@@ -2,121 +2,71 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.NET47", "Orc.Memento\Orc.Memento.NET47\Orc.Memento.NET47.csproj", "{073A2955-E973-4749-9E47-C07D8C8DD6A3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{1FE0D431-A761-4239-B2D6-D32C70723FD2}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.build.project.props = Directory.build.project.props
+		Directory.build.props = Directory.build.props
+		Directory.build.shared.explicit.props = Directory.build.shared.explicit.props
+		Directory.build.shared.implicit.props = Directory.build.shared.implicit.props
+		Directory.build.shared.mat.props = Directory.build.shared.mat.props
+		Directory.build.targets = Directory.build.targets
 		GlobalSuppressions.cs = GlobalSuppressions.cs
 		nuget.config = nuget.config
 		Orc.Memento.sln.DotSettings = Orc.Memento.sln.DotSettings
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Tests.NET47", "Orc.Memento.Tests\Orc.Memento.Tests.NET47\Orc.Memento.Tests.NET47.csproj", "{287C7549-E333-4E3F-9B40-4236A374630D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0787DFC6-AB24-4D00-A8A4-FF203DC7D080}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D3EA1078-BF3D-4709-871C-AAFF70B95045}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.Memento.Shared", "Orc.Memento\Orc.Memento.Shared\Orc.Memento.Shared.shproj", "{D4E57C0E-9E38-4A1F-9086-F8EDEA3D31D3}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.Memento.Tests.Shared", "Orc.Memento.Tests\Orc.Memento.Tests.Shared\Orc.Memento.Tests.Shared.shproj", "{E4D948A3-E0E7-47CC-85D1-622883E5D18A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.NET45", "Orc.Memento\Orc.Memento.NET45\Orc.Memento.NET45.csproj", "{FDECD749-8D96-4EE6-82D6-A8B8486D3761}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Tests.NET45", "Orc.Memento.Tests\Orc.Memento.Tests.NET45\Orc.Memento.Tests.NET45.csproj", "{0A0792A2-2D70-41D6-80C5-5FA560AF9B5D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{672BFA2E-9F93-496F-B188-40579FB5D301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Example.NET47", "Orc.Memento.Example\Orc.Memento.Example.NET47\Orc.Memento.Example.NET47.csproj", "{FA9FD4F9-4229-4F25-909A-E81D78109212}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Memento", "Orc.Memento\Orc.Memento.csproj", "{E0370049-54DB-46B4-A6EF-CF6AF3A8A568}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.Memento.Example.Shared", "Orc.Memento.Example\Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.shproj", "{22B2A860-9CB2-44DE-9C68-B497BF356CFA}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.Memento.Example.Shared", "Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.shproj", "{22B2A860-9CB2-44DE-9C68-B497BF356CFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Example.NET45", "Orc.Memento.Example\Orc.Memento.Example.NET45\Orc.Memento.Example.NET45.csproj", "{7F96C0EA-49AF-44C9-AC2A-6F8902737683}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Memento.Example.NET", "Orc.Memento.Example.NET\Orc.Memento.Example.NET.csproj", "{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.NET46", "Orc.Memento\Orc.Memento.NET46\Orc.Memento.NET46.csproj", "{E8787E12-D9B1-4259-8C78-B44E5A107E7D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Tests.NET46", "Orc.Memento.Tests\Orc.Memento.Tests.NET46\Orc.Memento.Tests.NET46.csproj", "{7A8490B8-790F-4193-B254-A98E744671A1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.Memento.Example.NET46", "Orc.Memento.Example\Orc.Memento.Example.NET46\Orc.Memento.Example.NET46.csproj", "{93754BFC-1542-481C-8546-DCD94DF23DF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.Memento.Tests", "Orc.Memento.Tests\Orc.Memento.Tests.csproj", "{7A04BF3F-D9DC-4959-A130-5D587A7459FB}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Orc.Memento\Orc.Memento.Shared\Orc.Memento.Shared.projitems*{073a2955-e973-4749-9e47-c07d8c8dd6a3}*SharedItemsImports = 4
-		Orc.Memento.Tests\Orc.Memento.Tests.Shared\Orc.Memento.Tests.Shared.projitems*{0a0792a2-2d70-41d6-80c5-5fa560af9b5d}*SharedItemsImports = 4
-		Orc.Memento.Example\Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.projitems*{22b2a860-9cb2-44de-9c68-b497bf356cfa}*SharedItemsImports = 13
-		Orc.Memento.Tests\Orc.Memento.Tests.Shared\Orc.Memento.Tests.Shared.projitems*{287c7549-e333-4e3f-9b40-4236a374630d}*SharedItemsImports = 4
-		Orc.Memento.Tests\Orc.Memento.Tests.Shared\Orc.Memento.Tests.Shared.projitems*{7a8490b8-790f-4193-b254-a98e744671a1}*SharedItemsImports = 4
-		Orc.Memento.Example\Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.projitems*{7f96c0ea-49af-44c9-ac2a-6f8902737683}*SharedItemsImports = 4
-		Orc.Memento.Example\Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.projitems*{93754bfc-1542-481c-8546-dcd94df23df8}*SharedItemsImports = 4
-		Orc.Memento\Orc.Memento.Shared\Orc.Memento.Shared.projitems*{d4e57c0e-9e38-4a1f-9086-f8edea3d31d3}*SharedItemsImports = 13
-		Orc.Memento.Tests\Orc.Memento.Tests.Shared\Orc.Memento.Tests.Shared.projitems*{e4d948a3-e0e7-47cc-85d1-622883e5d18a}*SharedItemsImports = 13
-		Orc.Memento\Orc.Memento.Shared\Orc.Memento.Shared.projitems*{e8787e12-d9b1-4259-8c78-b44e5a107e7d}*SharedItemsImports = 4
-		Orc.Memento.Example\Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.projitems*{fa9fd4f9-4229-4f25-909a-e81d78109212}*SharedItemsImports = 4
-		Orc.Memento\Orc.Memento.Shared\Orc.Memento.Shared.projitems*{fdecd749-8d96-4ee6-82d6-a8b8486d3761}*SharedItemsImports = 4
+		Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.projitems*{22b2a860-9cb2-44de-9c68-b497bf356cfa}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{073A2955-E973-4749-9E47-C07D8C8DD6A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{073A2955-E973-4749-9E47-C07D8C8DD6A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{073A2955-E973-4749-9E47-C07D8C8DD6A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{073A2955-E973-4749-9E47-C07D8C8DD6A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{287C7549-E333-4E3F-9B40-4236A374630D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{287C7549-E333-4E3F-9B40-4236A374630D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{287C7549-E333-4E3F-9B40-4236A374630D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{287C7549-E333-4E3F-9B40-4236A374630D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDECD749-8D96-4EE6-82D6-A8B8486D3761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDECD749-8D96-4EE6-82D6-A8B8486D3761}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDECD749-8D96-4EE6-82D6-A8B8486D3761}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDECD749-8D96-4EE6-82D6-A8B8486D3761}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A0792A2-2D70-41D6-80C5-5FA560AF9B5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A0792A2-2D70-41D6-80C5-5FA560AF9B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A0792A2-2D70-41D6-80C5-5FA560AF9B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A0792A2-2D70-41D6-80C5-5FA560AF9B5D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA9FD4F9-4229-4F25-909A-E81D78109212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA9FD4F9-4229-4F25-909A-E81D78109212}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA9FD4F9-4229-4F25-909A-E81D78109212}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA9FD4F9-4229-4F25-909A-E81D78109212}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F96C0EA-49AF-44C9-AC2A-6F8902737683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F96C0EA-49AF-44C9-AC2A-6F8902737683}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F96C0EA-49AF-44C9-AC2A-6F8902737683}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F96C0EA-49AF-44C9-AC2A-6F8902737683}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8787E12-D9B1-4259-8C78-B44E5A107E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8787E12-D9B1-4259-8C78-B44E5A107E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8787E12-D9B1-4259-8C78-B44E5A107E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8787E12-D9B1-4259-8C78-B44E5A107E7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A8490B8-790F-4193-B254-A98E744671A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A8490B8-790F-4193-B254-A98E744671A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A8490B8-790F-4193-B254-A98E744671A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A8490B8-790F-4193-B254-A98E744671A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{93754BFC-1542-481C-8546-DCD94DF23DF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93754BFC-1542-481C-8546-DCD94DF23DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93754BFC-1542-481C-8546-DCD94DF23DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93754BFC-1542-481C-8546-DCD94DF23DF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0370049-54DB-46B4-A6EF-CF6AF3A8A568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0370049-54DB-46B4-A6EF-CF6AF3A8A568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0370049-54DB-46B4-A6EF-CF6AF3A8A568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0370049-54DB-46B4-A6EF-CF6AF3A8A568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{073A2955-E973-4749-9E47-C07D8C8DD6A3} = {0787DFC6-AB24-4D00-A8A4-FF203DC7D080}
-		{287C7549-E333-4E3F-9B40-4236A374630D} = {D3EA1078-BF3D-4709-871C-AAFF70B95045}
 		{0787DFC6-AB24-4D00-A8A4-FF203DC7D080} = {A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}
 		{D3EA1078-BF3D-4709-871C-AAFF70B95045} = {A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}
-		{D4E57C0E-9E38-4A1F-9086-F8EDEA3D31D3} = {0787DFC6-AB24-4D00-A8A4-FF203DC7D080}
-		{E4D948A3-E0E7-47CC-85D1-622883E5D18A} = {D3EA1078-BF3D-4709-871C-AAFF70B95045}
-		{FDECD749-8D96-4EE6-82D6-A8B8486D3761} = {0787DFC6-AB24-4D00-A8A4-FF203DC7D080}
-		{0A0792A2-2D70-41D6-80C5-5FA560AF9B5D} = {D3EA1078-BF3D-4709-871C-AAFF70B95045}
 		{672BFA2E-9F93-496F-B188-40579FB5D301} = {A8A1A4EE-E04A-43AB-90C9-41E7B82EE1E5}
-		{FA9FD4F9-4229-4F25-909A-E81D78109212} = {672BFA2E-9F93-496F-B188-40579FB5D301}
+		{E0370049-54DB-46B4-A6EF-CF6AF3A8A568} = {0787DFC6-AB24-4D00-A8A4-FF203DC7D080}
 		{22B2A860-9CB2-44DE-9C68-B497BF356CFA} = {672BFA2E-9F93-496F-B188-40579FB5D301}
-		{7F96C0EA-49AF-44C9-AC2A-6F8902737683} = {672BFA2E-9F93-496F-B188-40579FB5D301}
-		{E8787E12-D9B1-4259-8C78-B44E5A107E7D} = {0787DFC6-AB24-4D00-A8A4-FF203DC7D080}
-		{7A8490B8-790F-4193-B254-A98E744671A1} = {D3EA1078-BF3D-4709-871C-AAFF70B95045}
-		{93754BFC-1542-481C-8546-DCD94DF23DF8} = {672BFA2E-9F93-496F-B188-40579FB5D301}
+		{7C9DF271-17CD-4FE7-A7B4-21446232AB0E} = {672BFA2E-9F93-496F-B188-40579FB5D301}
+		{7A04BF3F-D9DC-4959-A130-5D587A7459FB} = {D3EA1078-BF3D-4709-871C-AAFF70B95045}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CD1B54A-2F0F-43A4-9A73-673ABF8E170A}
 	EndGlobalSection
 EndGlobal
