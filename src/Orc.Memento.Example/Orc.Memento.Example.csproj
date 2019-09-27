@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
-    <AssemblyName>Orc.Memento.Example.NET</AssemblyName>
+    <AssemblyName>Orc.Memento.Example</AssemblyName>
     <RootNamespace>Orc.Memento.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <SonarQubeExclude>true</SonarQubeExclude>
@@ -21,12 +21,13 @@
     <PackageReference Include="Fody" Version="6.0.0" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="gong-wpf-dragdrop" Version="2.1.0" />
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="4.3.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.1.0" PrivateAssets="all" />
     <PackageReference Include="Orchestra.Core" Version="5.2.3" />
-    <PackageReference Include="WpfAnalyzers" Version="2.2.0.2" PrivateAssets="all" />
     <PackageReference Include="Orc.Controls" Version="3.2.3" />
+    <PackageReference Include="WpfAnalyzers" Version="2.2.0.2" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,8 +37,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Orc.Memento\Orc.Memento.csproj" />
   </ItemGroup>
-
-  <Import Project="..\Orc.Memento.Example.Shared\Orc.Memento.Example.Shared.projitems" Label="Shared" />
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

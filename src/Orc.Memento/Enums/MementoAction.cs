@@ -10,6 +10,8 @@ namespace Orc.Memento
     public enum MementoAction
     {
         Undo,
-        Redo
+        Redo,
+        ChangeRecorded,
+        ClearData,
     }
 }

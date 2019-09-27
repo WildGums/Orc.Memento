@@ -104,11 +104,17 @@ namespace Orc.Memento
     {
         Undo = 0,
         Redo = 1,
+        ChangeRecorded = 2,
+        ClearData = 3,
     }
     public class MementoEventArgs : System.EventArgs
     {
         public MementoEventArgs(Orc.Memento.MementoAction mementoAction) { }
+        public MementoEventArgs(Orc.Memento.MementoAction mementoAction, Orc.Memento.IMementoSupport target) { }
+        public MementoEventArgs(Orc.Memento.MementoAction mementoAction, Orc.Memento.IMementoBatch targetBatch) { }
         public Orc.Memento.MementoAction MementoAction { get; }
+        public Orc.Memento.IMementoSupport Target { get; }
+        public Orc.Memento.IMementoBatch TargetBatch { get; }
     }
     public class MementoService : Orc.Memento.IMementoService
     {

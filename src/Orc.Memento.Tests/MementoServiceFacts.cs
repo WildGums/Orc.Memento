@@ -38,6 +38,28 @@ namespace Orc.Memento.Tests
                 Assert.AreEqual(1, mementoService.UndoBatches.Count());
                 Assert.AreEqual(1, firstBatch.ActionCount);
             }
+
+            [TestCase]
+            public void UndoBatches()
+            {
+                var model = new MockModel();
+                var mementoService = new MementoService();
+                mementoService.RegisterObject(model);
+
+                string originalNumber = model.Value;
+
+                mementoService.BeginBatch();
+
+                model.Value = "1000";
+                model.Value = "100";
+                model.Value = "10";
+
+                var mementoBatch = mementoService.EndBatch();
+
+                mementoBatch.Undo();
+
+                Assert.AreEqual(originalNumber, model.Value);
+            }
         }
         #endregion
 
@@ -389,27 +411,50 @@ namespace Orc.Memento.Tests
         }
         #endregion
 
-        [TestCase]
-        public void UndoBatches()
+        [TestFixture]
+        public class TheChangeNotifications
         {
-            var model = new MockModel();
-            var mementoService = new MementoService();
-            mementoService.RegisterObject(model);
+            [TestCase]
+            public void RaisesChangeRecordedEvent()
+            {
+                var mementoService = new MementoService();
 
-            string originalNumber = model.Value;
+                var success = false;
 
-            mementoService.BeginBatch();
+                mementoService.Updated += (sender, e) =>
+                {
+                    if (e.MementoAction == MementoAction.ChangeRecorded)
+                    {
+                        success = true;
+                    }
+                };
 
-            model.Value = "1000";
-            model.Value = "100";
-            model.Value = "10";
+                var undo1 = new MockUndo();
 
-            IMementoBatch mementoBatch = mementoService.EndBatch();
+                mementoService.Add(undo1);
 
-            mementoBatch.Undo();
+                Assert.IsTrue(success);
+            }
 
-            Assert.AreEqual(originalNumber, model.Value);
+            [TestCase]
+            public void RaisesClearDataEvent()
+            {
+                var mementoService = new MementoService();
+
+                var success = false;
+
+                mementoService.Updated += (sender, e) =>
+                {
+                    if (e.MementoAction == MementoAction.ClearData)
+                    {
+                        success = true;
+                    }
+                };
+
+                mementoService.Clear();
+
+                Assert.IsTrue(success);
+            }
         }
-
     }
 }

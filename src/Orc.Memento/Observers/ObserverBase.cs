@@ -31,7 +31,7 @@ namespace Orc.Memento
         {
             Tag = tag;
 
-            if (mementoService == null)
+            if (mementoService is null)
             {
                 var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
                 mementoService = dependencyResolver.Resolve<IMementoService>();
