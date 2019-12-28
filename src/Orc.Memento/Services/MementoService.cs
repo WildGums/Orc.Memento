@@ -211,7 +211,7 @@ namespace Orc.Memento
         /// <returns>The <see cref="IMementoBatch"/> that has just been ended or <c>null</c> if there was no current batch.</returns>
         public IMementoBatch EndBatch()
         {
-            if (_currentBatch == null)
+            if (_currentBatch is null)
             {
                 return null;
             }
@@ -253,7 +253,7 @@ namespace Orc.Memento
                 }
             }
 
-            if (undo == null)
+            if (undo is null)
             {
                 Log.Info("Cannot undo because there is no undo batch for this action");
                 return false;
@@ -264,6 +264,7 @@ namespace Orc.Memento
             try
             {
                 undo.Undo();
+
                 if (undo.CanRedo)
                 {
                     lock (_lock)
@@ -276,7 +277,7 @@ namespace Orc.Memento
                     }
                 }
 
-                Updated?.Invoke(this, new MementoEventArgs(MementoAction.Undo));
+                Updated?.Invoke(this, new MementoEventArgs(MementoAction.Undo, undo));
 
                 Log.Debug("Action is successfully undone");
                 return true;
@@ -315,7 +316,7 @@ namespace Orc.Memento
                 }
             }
 
-            if (undo == null || !undo.CanRedo)
+            if (undo is null || !undo.CanRedo)
             {
                 Log.Info("Cannot redo because there is no redo batch for this action");
                 return false;
@@ -326,6 +327,7 @@ namespace Orc.Memento
             try
             {
                 undo.Redo();
+
                 lock (_lock)
                 {
                     _undoBatches.Insert(0, undo);
@@ -335,7 +337,7 @@ namespace Orc.Memento
                     }
                 }
 
-                Updated?.Invoke(this, new MementoEventArgs(MementoAction.Redo));
+                Updated?.Invoke(this, new MementoEventArgs(MementoAction.Redo, undo));
 
                 Log.Debug("Action is successfully redone");
                 return true;
@@ -418,6 +420,8 @@ namespace Orc.Memento
                     _undoBatches.RemoveLast();
                 }
             }
+
+            Updated?.Invoke(this, new MementoEventArgs(MementoAction.ChangeRecorded, batch));
 
             return true;
         }
@@ -554,7 +558,7 @@ namespace Orc.Memento
         {
             Argument.IsNotNull("obj", obj);
 
-            if (list == null)
+            if (list is null)
             {
                 return;
             }
@@ -562,7 +566,7 @@ namespace Orc.Memento
             for (var i = 0; i < list.Count; i++)
             {
                 var batch = list[i] as Batch;
-                if (batch == null)
+                if (batch is null)
                 {
                     continue;
                 }
@@ -597,6 +601,8 @@ namespace Orc.Memento
 
                 _isUndoingOperation = false;
             }
+
+            Updated?.Invoke(this, new MementoEventArgs(MementoAction.ClearData));
 
             Log.Debug("Cleared all actions");
         }

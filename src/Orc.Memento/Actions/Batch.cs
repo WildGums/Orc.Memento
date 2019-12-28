@@ -100,7 +100,7 @@ namespace Orc.Memento
         /// <value>
         /// The actions.
         /// </value>
-        public IEnumerable<IMementoSupport> Actions { get; private set; }
+        public IEnumerable<IMementoSupport> Actions { get { return _actions; } }
 
         /// <summary>
         /// Gets a value indicating whether at least one action in this batch can redo.
