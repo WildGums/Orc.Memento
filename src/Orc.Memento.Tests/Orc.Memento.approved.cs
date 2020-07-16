@@ -1,6 +1,6 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
-public class static ModuleInitializer
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+public static class ModuleInitializer
 {
     public static void Initialize() { }
 }
@@ -53,11 +53,6 @@ namespace Orc.Memento
         public override void CancelSubscription() { }
         public void OnCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.All)]
-    public sealed class IgnoreMementoSupportAttribute : System.Attribute
-    {
-        public IgnoreMementoSupportAttribute() { }
-    }
     public interface IMementoBatch
     {
         int ActionCount { get; }
@@ -78,9 +73,9 @@ namespace Orc.Memento
         int MaximumSupportedBatches { get; set; }
         System.Collections.Generic.IEnumerable<Orc.Memento.IMementoBatch> RedoBatches { get; }
         System.Collections.Generic.IEnumerable<Orc.Memento.IMementoBatch> UndoBatches { get; }
-        public event System.EventHandler<Orc.Memento.MementoEventArgs> Updated;
-        bool Add(Orc.Memento.IMementoSupport operation, bool noInsertIfExecutingOperation = True);
-        bool Add(Orc.Memento.IMementoBatch batch, bool noInsertIfExecutingOperation = True);
+        event System.EventHandler<Orc.Memento.MementoEventArgs> Updated;
+        bool Add(Orc.Memento.IMementoBatch batch, bool noInsertIfExecutingOperation = true);
+        bool Add(Orc.Memento.IMementoSupport operation, bool noInsertIfExecutingOperation = true);
         Orc.Memento.IMementoBatch BeginBatch(string title = null, string description = null);
         void Clear(object instance = null);
         Orc.Memento.IMementoBatch EndBatch();
@@ -100,6 +95,11 @@ namespace Orc.Memento
         void Redo();
         void Undo();
     }
+    [System.AttributeUsage(System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.All)]
+    public sealed class IgnoreMementoSupportAttribute : System.Attribute
+    {
+        public IgnoreMementoSupportAttribute() { }
+    }
     public enum MementoAction
     {
         Undo = 0,
@@ -110,8 +110,8 @@ namespace Orc.Memento
     public class MementoEventArgs : System.EventArgs
     {
         public MementoEventArgs(Orc.Memento.MementoAction mementoAction) { }
-        public MementoEventArgs(Orc.Memento.MementoAction mementoAction, Orc.Memento.IMementoSupport target) { }
         public MementoEventArgs(Orc.Memento.MementoAction mementoAction, Orc.Memento.IMementoBatch targetBatch) { }
+        public MementoEventArgs(Orc.Memento.MementoAction mementoAction, Orc.Memento.IMementoSupport target) { }
         public Orc.Memento.MementoAction MementoAction { get; }
         public Orc.Memento.IMementoSupport Target { get; }
         public Orc.Memento.IMementoBatch TargetBatch { get; }
@@ -123,14 +123,14 @@ namespace Orc.Memento
         public MementoService(int maximumSupportedBatches) { }
         public bool CanRedo { get; }
         public bool CanUndo { get; }
-        public static Orc.Memento.IMementoService Default { get; }
         public bool IsEnabled { get; set; }
         public int MaximumSupportedBatches { get; set; }
         public System.Collections.Generic.IEnumerable<Orc.Memento.IMementoBatch> RedoBatches { get; }
         public System.Collections.Generic.IEnumerable<Orc.Memento.IMementoBatch> UndoBatches { get; }
+        public static Orc.Memento.IMementoService Default { get; }
         public event System.EventHandler<Orc.Memento.MementoEventArgs> Updated;
-        public bool Add(Orc.Memento.IMementoSupport operation, bool noInsertIfExecutingOperation = True) { }
-        public bool Add(Orc.Memento.IMementoBatch batch, bool noInsertIfExecutingOperation = True) { }
+        public bool Add(Orc.Memento.IMementoBatch batch, bool noInsertIfExecutingOperation = true) { }
+        public bool Add(Orc.Memento.IMementoSupport operation, bool noInsertIfExecutingOperation = true) { }
         public Orc.Memento.IMementoBatch BeginBatch(string title = null, string description = null) { }
         public void Clear(object instance = null) { }
         public Orc.Memento.IMementoBatch EndBatch() { }
