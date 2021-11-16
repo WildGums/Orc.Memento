@@ -32,7 +32,7 @@ namespace Orc.Memento
         public OperationSet(object target, IEnumerable<IMementoSupport> operations = null, object tag = null)
             : base(target, tag)
         {
-            if (operations != null)
+            if (operations is not null)
             {
                 _undoStack.AddRange(operations);
             }

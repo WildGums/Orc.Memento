@@ -105,7 +105,7 @@ namespace Orc.Memento
         {
             Log.Debug("Canceling collection change subscription");
 
-            if (_collection != null)
+            if (_collection is not null)
             {
                 _collection.CollectionChanged -= OnCollectionChanged;
                 _collection = null;

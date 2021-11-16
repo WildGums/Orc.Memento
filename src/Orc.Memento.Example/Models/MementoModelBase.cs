@@ -50,7 +50,7 @@
         private void RegisterCallerForStateTracking(string caller)
         {
             var instanceType = TypeDescriptor.GetReflectionType(this);
-            var propertyInfo = caller != null ? instanceType.GetProperty(caller) : null;
+            var propertyInfo = caller is not null ? instanceType.GetProperty(caller) : null;
 
             var dateTime = DateTime.Now;
             var infoString = $"{propertyInfo?.ReflectedType.Name}.{propertyInfo?.Name}";
