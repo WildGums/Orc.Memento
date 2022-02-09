@@ -91,12 +91,13 @@
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
+                    UnLoad();
                 }
+                
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                UnLoad();
                 _disposedValue = true;
             }
         }
@@ -108,12 +109,14 @@
         // }
 
         // This code added to correctly implement the disposable pattern.
+#pragma warning disable IDISP019 // Call SuppressFinalize
         public void Dispose()
+#pragma warning restore IDISP019 // Call SuppressFinalize
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
+            //GC.SuppressFinalize(this);
         }
         #endregion
     }

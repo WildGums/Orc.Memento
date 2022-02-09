@@ -16,8 +16,10 @@ namespace Orc.Memento.Example.ViewModels
     using Catel.MVVM;
     using Catel.Reflection;
 
-    public class MainViewModel : CustomDragDropEnabledViewModel
+    public class MainViewModel : CustomDragDropEnabledViewModel, IDisposable
     {
+        private bool _disposed;
+
         public MainViewModel(IMementoService mementoService)
             : base(mementoService)
         {
@@ -48,6 +50,7 @@ namespace Orc.Memento.Example.ViewModels
 
         #region Commands
         public Command Undo { get; private set; }
+
 
         private bool OnUndoCanExecute()
         {
@@ -224,6 +227,17 @@ namespace Orc.Memento.Example.ViewModels
             }
 
             ViewModelCommandManager.InvalidateCommands(true);
+        }
+
+        public virtual void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+            Model.Dispose();
         }
         #endregion
     }

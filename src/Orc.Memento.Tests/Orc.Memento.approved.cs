@@ -95,7 +95,7 @@ namespace Orc.Memento
         void Redo();
         void Undo();
     }
-    [System.AttributeUsage(System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.All)]
+    [System.AttributeUsage(System.AttributeTargets.Method | System.AttributeTargets.Property)]
     public sealed class IgnoreMementoSupportAttribute : System.Attribute
     {
         public IgnoreMementoSupportAttribute() { }
