@@ -38,7 +38,7 @@ namespace Orc.Memento
             _undoAction = undoAction;
             _redoAction = redoAction;
 
-            CanRedo = (_redoAction != null);
+            CanRedo = (_redoAction is not null);
         }
         #endregion
 

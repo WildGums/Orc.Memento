@@ -171,7 +171,7 @@ namespace Orc.Memento
 
             Log.Debug("Clearing actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
 
-            if (_actions != null)
+            if (_actions is not null)
             {
                 var temp = new List<IMementoSupport>(_actions.Where(operation => operation.Target == obj));
                 foreach (var operation in temp)

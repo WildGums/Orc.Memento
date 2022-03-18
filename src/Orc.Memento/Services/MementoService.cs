@@ -374,7 +374,7 @@ namespace Orc.Memento
 
             lock (_lock)
             {
-                if (_currentBatch != null)
+                if (_currentBatch is not null)
                 {
                     _currentBatch.AddAction(operation);
                 }
@@ -586,7 +586,7 @@ namespace Orc.Memento
         /// <param name="instance">The instance to clear the events for. If <c>null</c>, all events will be removed.</param>
         public void Clear(object instance = null)
         {
-            if (instance != null)
+            if (instance is not null)
             {
                 ClearActionsForObject(instance);
                 return;

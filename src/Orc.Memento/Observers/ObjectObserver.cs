@@ -76,7 +76,7 @@ namespace Orc.Memento
         public void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var modelBase = sender as ModelBase;
-            if (modelBase != null)
+            if (modelBase is not null)
             {
                 if ((string.CompareOrdinal(e.PropertyName, "INotifyDataErrorInfo.HasErrors") == 0) ||
                     (string.CompareOrdinal(e.PropertyName, "INotifyDataWarningInfo.HasWarnings") == 0) ||
@@ -151,7 +151,7 @@ namespace Orc.Memento
         {
             Log.Debug("Canceling property change subscription");
 
-            if (_object != null)
+            if (_object is not null)
             {
                 _object.PropertyChanged -= OnPropertyChanged;
                 _object = null;

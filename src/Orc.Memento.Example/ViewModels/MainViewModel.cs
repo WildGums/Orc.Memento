@@ -16,8 +16,10 @@ namespace Orc.Memento.Example.ViewModels
     using Catel.MVVM;
     using Catel.Reflection;
 
-    public class MainViewModel : CustomDragDropEnabledViewModel
+    public class MainViewModel : CustomDragDropEnabledViewModel, IDisposable
     {
+        private bool _disposed;
+
         public MainViewModel(IMementoService mementoService)
             : base(mementoService)
         {
@@ -48,6 +50,7 @@ namespace Orc.Memento.Example.ViewModels
 
         #region Commands
         public Command Undo { get; private set; }
+
 
         private bool OnUndoCanExecute()
         {
@@ -115,7 +118,7 @@ namespace Orc.Memento.Example.ViewModels
 
         private void OnAddSpecialDataExecute(SpecialDataClass selectedItem)
         {
-            if (selectedItem == null)
+            if (selectedItem is null)
             {
                 return;
             }
@@ -125,7 +128,7 @@ namespace Orc.Memento.Example.ViewModels
 
             _mementoService.BeginBatch("New data collection", dataId);
 
-            if (selectedItem.NestedData == null)
+            if (selectedItem.NestedData is null)
             {
                 selectedItem.NestedData = new ObservableCollection<SpecialDataClass>();
             }
@@ -199,7 +202,7 @@ namespace Orc.Memento.Example.ViewModels
                 if (mementoEvent.IsSingleActionBatch)
                 {
                     var propertyChangeAction = mementoEvent.Actions.First() as PropertyChangeUndo;
-                    if (propertyChangeAction != null)
+                    if (propertyChangeAction is not null)
                     {
                         var message = $"changed {propertyChangeAction.Target}.{propertyChangeAction.PropertyName}";
                         UndoRedoEvents.Add(message);
@@ -207,7 +210,7 @@ namespace Orc.Memento.Example.ViewModels
                     }
 
                     var collectionChangedAction = mementoEvent.Actions.First() as CollectionChangeUndo;
-                    if (collectionChangedAction != null)
+                    if (collectionChangedAction is not null)
                     {
                         var message = $"{collectionChangedAction.ChangeType} {mementoEvent.Title} {mementoEvent.Description}";
                         UndoRedoEvents.Add(message);
@@ -224,6 +227,17 @@ namespace Orc.Memento.Example.ViewModels
             }
 
             ViewModelCommandManager.InvalidateCommands(true);
+        }
+
+        public virtual void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+            Model.Dispose();
         }
         #endregion
     }
