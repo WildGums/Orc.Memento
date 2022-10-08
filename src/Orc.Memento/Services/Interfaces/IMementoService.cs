@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMementoService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +11,6 @@ namespace Orc.Memento
     /// </summary>
     public interface IMementoService
     {
-        #region Properties
         /// <summary>
         /// Gets or sets the maximum supported batches.
         /// </summary>
@@ -54,9 +46,12 @@ namespace Orc.Memento
         /// </summary>
         /// <value><c>true</c> if the service is enabled; otherwise, <c>false</c>.</value>
         bool IsEnabled { get; set; }
-        #endregion
 
-        #region Methods
+        /// <summary>
+        /// The Updated event
+        /// </summary>
+        event EventHandler<MementoEventArgs>? Updated;
+
         /// <summary>
         /// Begins a new batch.
         /// <para />
@@ -69,7 +64,7 @@ namespace Orc.Memento
         /// <param name="title">The title which can be used to display this batch i a user interface.</param>
         /// <param name="description">The description which can be used to display this batch i a user interface.</param>
         /// <returns>The <see cref="IMementoBatch" /> that has just been created.</returns>
-        IMementoBatch BeginBatch(string title = null, string description = null);
+        IMementoBatch BeginBatch(string title = "", string description = "");
 
         /// <summary>
         /// Ends the current batch and adds it to the stack by calling <see cref="Add(Orc.Memento.IMementoBatch,bool)"/>.
@@ -77,7 +72,7 @@ namespace Orc.Memento
         /// If there is currently no batch, this method will silently exit.
         /// </summary>
         /// <returns>The <see cref="IMementoBatch"/> that has just been ended or <c>null</c> if there was no current batch.</returns>
-        IMementoBatch EndBatch();
+        IMementoBatch? EndBatch();
 
         /// <summary>
         /// Executes the next Undo batch.
@@ -121,7 +116,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="instance" /> is <c>null</c>.</exception>
         /// <remarks>The <see cref="RegisterObject" /> will subscribe to the instance using the <see cref="IWeakEventListener" />. There is no
         /// need to use the <see cref="UnregisterObject" /> unless an object must be cleared manually.</remarks>
-        void RegisterObject(INotifyPropertyChanged instance, object tag = null);
+        void RegisterObject(INotifyPropertyChanged instance, object? tag = null);
 
         /// <summary>
         /// Unregisters the object and stops automatically watching the object. All undo/redo history will be removed.
@@ -139,7 +134,7 @@ namespace Orc.Memento
         /// <param name="collection">The collection.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection" /> is <c>null</c>.</exception>
-        void RegisterCollection(INotifyCollectionChanged collection, object tag = null);
+        void RegisterCollection(INotifyCollectionChanged collection, object? tag = null);
 
         /// <summary>
         /// Unregisters the collection and stops automatically watching the collection. All undo/redo history will be removed.
@@ -153,12 +148,6 @@ namespace Orc.Memento
         /// collection where you are tracking changes to indexes inside it for example).
         /// </summary>
         /// <param name="instance">The instance to clear the events for. If <c>null</c>, all events will be removed.</param>
-        void Clear(object instance = null);
-        #endregion
-
-        /// <summary>
-        /// The Updated event
-        /// </summary>
-        event EventHandler<MementoEventArgs> Updated;
+        void Clear(object? instance = null);
     }
 }

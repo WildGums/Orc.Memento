@@ -1,27 +1,18 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyChangeUndoFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento.Tests
+﻿namespace Orc.Memento.Tests
 {
     using System;
-    using Catel.Tests;
     using Mocks;
     using NUnit.Framework;
 
     public class PropertyChangeUndoFacts
     {
-        #region Nested type: TheConstructor
         [TestFixture]
         public class TheConstructor
         {
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new PropertyChangeUndo(null, "PropertyName", null));
+                Assert.Throws<ArgumentNullException>(() => new PropertyChangeUndo(null, "PropertyName", null));
             }
 
             [TestCase]
@@ -29,8 +20,8 @@ namespace Orc.Memento.Tests
             {
                 var obj = new object();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new PropertyChangeUndo(obj, null, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new PropertyChangeUndo(obj, string.Empty, null));
+                Assert.Throws<ArgumentException>(() => new PropertyChangeUndo(obj, null, null));
+                Assert.Throws<ArgumentException>(() => new PropertyChangeUndo(obj, string.Empty, null));
             }
 
             [TestCase]
@@ -47,9 +38,7 @@ namespace Orc.Memento.Tests
                 Assert.AreEqual(true, propertyChangeUndo.CanRedo);
             }
         }
-        #endregion
 
-        #region Nested type: TheRedoMethod
         [TestFixture]
         public class TheRedoMethod
         {
@@ -64,9 +53,7 @@ namespace Orc.Memento.Tests
                 Assert.AreEqual("nextValue", obj.Value);
             }
         }
-        #endregion
 
-        #region Nested type: TheUndoMethod
         [TestFixture]
         public class TheUndoMethod
         {
@@ -81,6 +68,5 @@ namespace Orc.Memento.Tests
                 Assert.AreEqual("previousValue", obj.Value);
             }
         }
-        #endregion
     }
 }

@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-    using System.Text;
     using Catel.Data;
 
     public class MementoModelBase : ModelBase, IDisposable
@@ -31,7 +29,7 @@
                 {
                     _mementoService.UnregisterCollection((INotifyCollectionChanged)kvp.Value);
                 }
-                else
+                else if (kvp.Key.Contains(OBJECT_INDICATOR))
                 {
                     _mementoService.UnregisterObject((INotifyPropertyChanged)kvp.Value);
                 }
@@ -40,7 +38,7 @@
             _mementoHashtable.Clear();
         }
 
-        protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.RaisePropertyChanged(sender, e);
 

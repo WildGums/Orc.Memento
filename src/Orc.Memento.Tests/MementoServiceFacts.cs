@@ -1,16 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MementoServiceFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento.Tests
+﻿namespace Orc.Memento.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Catel.Tests;
     using Mocks;
     using NUnit.Framework;
 
@@ -71,7 +63,7 @@ namespace Orc.Memento.Tests
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForNegativeParameter()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => new MementoService(-1));
+                Assert.Throws<ArgumentOutOfRangeException>(() => new MementoService(-1));
             }
 
             [TestCase]
@@ -375,7 +367,7 @@ namespace Orc.Memento.Tests
             {
                 var service = new MementoService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => service.UnregisterObject(null));
+                Assert.Throws<ArgumentNullException>(() => service.UnregisterObject(null));
             }
 
             [TestCase]

@@ -1,17 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MementoEventArgs.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System;
 
     public class MementoEventArgs : EventArgs
     {
-        #region Constructors
         public MementoEventArgs(MementoAction mementoAction)
         {
             MementoAction = mementoAction;
@@ -28,14 +20,11 @@ namespace Orc.Memento
             MementoAction = mementoAction;
             TargetBatch = targetBatch;
         }
-        #endregion
 
-        #region Properties
-        public IMementoSupport Target { get; }
+        public IMementoSupport? Target { get; }
 
-        public IMementoBatch TargetBatch { get; }
+        public IMementoBatch? TargetBatch { get; }
 
         public MementoAction MementoAction { get; }
-        #endregion
     }
 }

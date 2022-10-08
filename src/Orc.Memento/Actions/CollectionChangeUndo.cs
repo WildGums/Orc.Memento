@@ -1,13 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionChangeUndo.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
-    using Catel;
     using System;
     using System.Collections;
 
@@ -45,7 +37,6 @@ namespace Orc.Memento
     /// </summary>
     public class CollectionChangeUndo : UndoBase
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionChangeUndo"/> class.
         /// </summary>
@@ -58,10 +49,10 @@ namespace Orc.Memento
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection" /> is <c>null</c>.</exception>
         public CollectionChangeUndo(IList collection, CollectionChangeType type, int oldPosition, int newPosition,
-            object oldValue, object newValue, object tag = null)
+            object? oldValue, object? newValue, object? tag = null)
             : base(collection, tag)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             ChangeType = type;
             Position = oldPosition;
@@ -71,9 +62,7 @@ namespace Orc.Memento
 
             CanRedo = true;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the target collection to support undo/redo for.
         /// </summary>
@@ -100,15 +89,13 @@ namespace Orc.Memento
         /// <summary>
         /// Gets the new value.
         /// </summary>
-        public object NewValue { get; private set; }
+        public object? NewValue { get; private set; }
 
         /// <summary>
         /// Gets the old value.
         /// </summary>
-        public object OldValue { get; private set; }
-        #endregion
+        public object? OldValue { get; private set; }
 
-        #region Methods
         /// <summary>
         /// Method that will actually undo the action.
         /// </summary>
@@ -181,6 +168,5 @@ namespace Orc.Memento
                     break;
             }
         }
-        #endregion
     }
 }

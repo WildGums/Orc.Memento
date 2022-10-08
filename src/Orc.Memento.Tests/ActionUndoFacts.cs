@@ -1,14 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ActionUndoFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento.Tests
+﻿namespace Orc.Memento.Tests
 {
     using System;
-    using Catel.Tests;
     using Mocks;
     using NUnit.Framework;
 
@@ -61,15 +53,15 @@ namespace Orc.Memento.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ActionUndo(null, () => MockModel.Change("test")));
+                Assert.Throws<ArgumentNullException>(() => new ActionUndo(null, () => MockModel.Change("test")));
             }
 
             [TestCase]
-            public void ThrowsArgumentExceptionForNullUndoMethod()
+            public void ThrowsArgumentNullExceptionForNullUndoMethod()
             {
                 var obj = new object();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new ActionUndo(obj, null));
+                Assert.Throws<ArgumentNullException>(() => new ActionUndo(obj, null));
             }
         }
         #endregion

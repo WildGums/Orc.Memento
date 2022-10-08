@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModuleInitializer.cs" company="WildGums">
-//   Copyright (c) 2008 - 2018 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-using Catel.IoC;
+﻿using Catel.IoC;
 using Orc.Memento;
 
 /// <summary>
@@ -13,7 +6,6 @@ using Orc.Memento;
 /// </summary>
 public static class ModuleInitializer
 {
-    #region Methods
     /// <summary>
     /// Initializes the module.
     /// </summary>
@@ -23,5 +15,4 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterTypeIfNotYetRegistered<IMementoService, MementoService>();
     }
-    #endregion
 }

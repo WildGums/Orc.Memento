@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Batch.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System;
     using System.Collections.Generic;
@@ -18,27 +11,22 @@ namespace Orc.Memento
     /// </summary>
     public class Batch : IMementoBatch, IUniqueIdentifyable
     {
-        #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Fields
         private readonly List<IMementoSupport> _actions = new List<IMementoSupport>();
 
         private bool _canRedo;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Batch"/> class.
         /// </summary>
         public Batch()
         {
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<Batch>();
+            Title = string.Empty;
+            Description = string.Empty;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the unique identifier.
         /// </summary>
@@ -112,9 +100,7 @@ namespace Orc.Memento
         {
             get { return _canRedo; }
         }
-        #endregion
 
-        #region IMementoBatch Members
         /// <summary>
         /// Calls the <see cref="IMementoSupport.Undo"/> of all actions in this batch.
         /// </summary>
@@ -136,9 +122,7 @@ namespace Orc.Memento
                 action.Redo();
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Adds the action to the current batch.
         /// </summary>
@@ -146,7 +130,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
         public void AddAction(IMementoSupport action)
         {
-            Argument.IsNotNull("action", action);
+            ArgumentNullException.ThrowIfNull(action);
 
             _actions.Add(action);
 
@@ -167,21 +151,18 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         public void ClearActionsForObject(object obj)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
 
             Log.Debug("Clearing actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
 
-            if (_actions is not null)
+            var temp = new List<IMementoSupport>(_actions.Where(operation => operation.Target == obj));
+
+            foreach (var operation in temp)
             {
-                var temp = new List<IMementoSupport>(_actions.Where(operation => operation.Target == obj));
-                foreach (var operation in temp)
-                {
-                    _actions.Remove(operation);
-                }
+                _actions.Remove(operation);
             }
 
             Log.Debug("Cleared actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
         }
-        #endregion
     }
 }
