@@ -1,28 +1,19 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionChangeUndoFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento.Tests
+﻿namespace Orc.Memento.Tests
 {
     using System;
     using System.Collections.Generic;
     using Catel.Collections;
-    using Catel.Tests;
     using NUnit.Framework;
 
     public class CollectionChangeUndoFacts
     {
-        #region Nested type: TheConstructor
         [TestFixture]
         public class TheConstructor
         {
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new CollectionChangeUndo(null, CollectionChangeType.Add, 0, 0, null, null));
+                Assert.Throws<ArgumentNullException>(() => new CollectionChangeUndo(null, CollectionChangeType.Add, 0, 0, null, null));
             }
 
             [TestCase]
@@ -39,9 +30,7 @@ namespace Orc.Memento.Tests
                 Assert.AreEqual(true, collectionChangeUndo.CanRedo);
             }
         }
-        #endregion
 
-        #region Nested type: TheRedoMethod
         [TestFixture]
         public class TheRedoMethod
         {
@@ -59,9 +48,7 @@ namespace Orc.Memento.Tests
 
             // TODO: Write replace, remove, move
         }
-        #endregion
 
-        #region Nested type: TheUndoMethod
         [TestFixture]
         public class TheUndoMethod
         {
@@ -79,6 +66,5 @@ namespace Orc.Memento.Tests
 
             // TODO: Write replace, remove, move
         }
-        #endregion
     }
 }

@@ -8,7 +8,7 @@ namespace Orc.Memento
 {
     public class ActionUndo : Orc.Memento.UndoBase
     {
-        public ActionUndo(object target, System.Action undoAction, System.Action redoAction = null, object tag = null) { }
+        public ActionUndo(object target, System.Action undoAction, System.Action? redoAction = null, object? tag = null) { }
         protected override void RedoAction() { }
         protected override void UndoAction() { }
     }
@@ -37,21 +37,21 @@ namespace Orc.Memento
     }
     public class CollectionChangeUndo : Orc.Memento.UndoBase
     {
-        public CollectionChangeUndo(System.Collections.IList collection, Orc.Memento.CollectionChangeType type, int oldPosition, int newPosition, object oldValue, object newValue, object tag = null) { }
+        public CollectionChangeUndo(System.Collections.IList collection, Orc.Memento.CollectionChangeType type, int oldPosition, int newPosition, object? oldValue, object? newValue, object? tag = null) { }
         public Orc.Memento.CollectionChangeType ChangeType { get; }
         public System.Collections.IList Collection { get; }
         public int NewPosition { get; }
-        public object NewValue { get; }
-        public object OldValue { get; }
+        public object? NewValue { get; }
+        public object? OldValue { get; }
         public int Position { get; }
         protected override void RedoAction() { }
         protected override void UndoAction() { }
     }
     public class CollectionObserver : Orc.Memento.ObserverBase
     {
-        public CollectionObserver(System.Collections.Specialized.INotifyCollectionChanged collection, object tag = null, Orc.Memento.IMementoService mementoService = null) { }
+        public CollectionObserver(System.Collections.Specialized.INotifyCollectionChanged collection, object? tag = null, Orc.Memento.IMementoService? mementoService = null) { }
         public override void CancelSubscription() { }
-        public void OnCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
+        public void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
     }
     public interface IMementoBatch
     {
@@ -73,15 +73,15 @@ namespace Orc.Memento
         int MaximumSupportedBatches { get; set; }
         System.Collections.Generic.IEnumerable<Orc.Memento.IMementoBatch> RedoBatches { get; }
         System.Collections.Generic.IEnumerable<Orc.Memento.IMementoBatch> UndoBatches { get; }
-        event System.EventHandler<Orc.Memento.MementoEventArgs> Updated;
+        event System.EventHandler<Orc.Memento.MementoEventArgs>? Updated;
         bool Add(Orc.Memento.IMementoBatch batch, bool noInsertIfExecutingOperation = true);
         bool Add(Orc.Memento.IMementoSupport operation, bool noInsertIfExecutingOperation = true);
-        Orc.Memento.IMementoBatch BeginBatch(string title = null, string description = null);
-        void Clear(object instance = null);
-        Orc.Memento.IMementoBatch EndBatch();
+        Orc.Memento.IMementoBatch BeginBatch(string title = "", string description = "");
+        void Clear(object? instance = null);
+        Orc.Memento.IMementoBatch? EndBatch();
         bool Redo();
-        void RegisterCollection(System.Collections.Specialized.INotifyCollectionChanged collection, object tag = null);
-        void RegisterObject(System.ComponentModel.INotifyPropertyChanged instance, object tag = null);
+        void RegisterCollection(System.Collections.Specialized.INotifyCollectionChanged collection, object? tag = null);
+        void RegisterObject(System.ComponentModel.INotifyPropertyChanged instance, object? tag = null);
         bool Undo();
         void UnregisterCollection(System.Collections.Specialized.INotifyCollectionChanged collection);
         void UnregisterObject(System.ComponentModel.INotifyPropertyChanged instance);
@@ -90,7 +90,7 @@ namespace Orc.Memento
     {
         bool CanRedo { get; }
         string Description { get; set; }
-        object Tag { get; set; }
+        object? Tag { get; set; }
         object Target { get; }
         void Redo();
         void Undo();
@@ -113,8 +113,8 @@ namespace Orc.Memento
         public MementoEventArgs(Orc.Memento.MementoAction mementoAction, Orc.Memento.IMementoBatch targetBatch) { }
         public MementoEventArgs(Orc.Memento.MementoAction mementoAction, Orc.Memento.IMementoSupport target) { }
         public Orc.Memento.MementoAction MementoAction { get; }
-        public Orc.Memento.IMementoSupport Target { get; }
-        public Orc.Memento.IMementoBatch TargetBatch { get; }
+        public Orc.Memento.IMementoSupport? Target { get; }
+        public Orc.Memento.IMementoBatch? TargetBatch { get; }
     }
     public class MementoService : Orc.Memento.IMementoService
     {
@@ -128,35 +128,35 @@ namespace Orc.Memento
         public System.Collections.Generic.IEnumerable<Orc.Memento.IMementoBatch> RedoBatches { get; }
         public System.Collections.Generic.IEnumerable<Orc.Memento.IMementoBatch> UndoBatches { get; }
         public static Orc.Memento.IMementoService Default { get; }
-        public event System.EventHandler<Orc.Memento.MementoEventArgs> Updated;
+        public event System.EventHandler<Orc.Memento.MementoEventArgs>? Updated;
         public bool Add(Orc.Memento.IMementoBatch batch, bool noInsertIfExecutingOperation = true) { }
         public bool Add(Orc.Memento.IMementoSupport operation, bool noInsertIfExecutingOperation = true) { }
-        public Orc.Memento.IMementoBatch BeginBatch(string title = null, string description = null) { }
-        public void Clear(object instance = null) { }
-        public Orc.Memento.IMementoBatch EndBatch() { }
+        public Orc.Memento.IMementoBatch BeginBatch(string title = "", string description = "") { }
+        public void Clear(object? instance = null) { }
+        public Orc.Memento.IMementoBatch? EndBatch() { }
         public bool Redo() { }
-        public void RegisterCollection(System.Collections.Specialized.INotifyCollectionChanged collection, object tag = null) { }
-        public void RegisterObject(System.ComponentModel.INotifyPropertyChanged instance, object tag = null) { }
+        public void RegisterCollection(System.Collections.Specialized.INotifyCollectionChanged collection, object? tag = null) { }
+        public void RegisterObject(System.ComponentModel.INotifyPropertyChanged instance, object? tag = null) { }
         public bool Undo() { }
         public void UnregisterCollection(System.Collections.Specialized.INotifyCollectionChanged collection) { }
         public void UnregisterObject(System.ComponentModel.INotifyPropertyChanged instance) { }
     }
     public class ObjectObserver : Orc.Memento.ObserverBase
     {
-        public ObjectObserver(System.ComponentModel.INotifyPropertyChanged propertyChanged, object tag = null, Orc.Memento.IMementoService mementoService = null) { }
+        public ObjectObserver(System.ComponentModel.INotifyPropertyChanged propertyChanged, object? tag = null, Orc.Memento.IMementoService? mementoService = null) { }
         public override void CancelSubscription() { }
-        public void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        public void OnPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
     }
     public abstract class ObserverBase
     {
-        protected ObserverBase(object tag, Orc.Memento.IMementoService mementoService = null) { }
+        protected ObserverBase(object? tag, Orc.Memento.IMementoService? mementoService = null) { }
         protected Orc.Memento.IMementoService MementoService { get; }
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
         public abstract void CancelSubscription();
     }
     public class OperationSet : Orc.Memento.UndoBase
     {
-        public OperationSet(object target, System.Collections.Generic.IEnumerable<Orc.Memento.IMementoSupport> operations = null, object tag = null) { }
+        public OperationSet(object target, System.Collections.Generic.IEnumerable<Orc.Memento.IMementoSupport>? operations = null, object? tag = null) { }
         public void Add(Orc.Memento.IMementoSupport operation) { }
         public void AddRange(System.Collections.Generic.IEnumerable<Orc.Memento.IMementoSupport> operations) { }
         protected override void RedoAction() { }
@@ -164,19 +164,19 @@ namespace Orc.Memento
     }
     public class PropertyChangeUndo : Orc.Memento.UndoBase
     {
-        public PropertyChangeUndo(object target, string propertyName, object oldValue, object newValue = null, object tag = null) { }
-        public object NewValue { get; }
-        public object OldValue { get; }
+        public PropertyChangeUndo(object target, string propertyName, object? oldValue = null, object? newValue = null, object? tag = null) { }
+        public object? NewValue { get; }
+        public object? OldValue { get; }
         public string PropertyName { get; }
         protected override void RedoAction() { }
         protected override void UndoAction() { }
     }
     public abstract class UndoBase : Orc.Memento.IMementoSupport
     {
-        protected UndoBase(object target, object tag) { }
+        protected UndoBase(object target, object? tag) { }
         public bool CanRedo { get; set; }
         public string Description { get; set; }
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
         public object Target { get; }
         public void Redo() { }
         protected abstract void RedoAction();

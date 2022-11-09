@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UndoBase.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System;
     using Catel;
@@ -16,32 +9,28 @@ namespace Orc.Memento
     /// </summary>
     public abstract class UndoBase : IMementoSupport
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UndoBase"/> class.
         /// </summary>
         /// <param name="target">The target.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
-        protected UndoBase(object target, object tag)
+        protected UndoBase(object target, object? tag)
         {
-            Argument.IsNotNull("target", target);
+            ArgumentNullException.ThrowIfNull(target);
 
             Target = target;
             Tag = tag;
+            Description = string.Empty;
 
             Log.Debug("Constructed '{0}' undo/redo action for object of type '{0}' with tag '{1}'", GetType().Name, target.GetType().Name, TagHelper.ToString(Tag));
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the target.
         /// </summary>
@@ -58,16 +47,14 @@ namespace Orc.Memento
         /// Gets or sets the tag which can be used to group operations by object.
         /// </summary>
         /// <value>The tag.</value>
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the operation can be "reapplied" after undo.
         /// </summary>
         /// <value><c>true</c> if this instance can redo; otherwise, <c>false</c>.</value>
         public bool CanRedo { get; protected set; }
-        #endregion
 
-        #region IMementoSupport Members
         /// <summary>
         /// Method used to undo operation.
         /// </summary>
@@ -97,9 +84,7 @@ namespace Orc.Memento
 
             Log.Debug("Redone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Method that will actually undo the action.
         /// </summary>
@@ -110,6 +95,5 @@ namespace Orc.Memento
         /// this will be done internally.
         /// </summary>
         protected abstract void RedoAction();
-        #endregion
     }
 }

@@ -1,20 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectObserverFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento.Tests
+﻿namespace Orc.Memento.Tests
 {
     using System;
     using System.Linq;
-    using Catel.Tests;
     using NUnit.Framework;
 
     public class ObjectObserverFacts
     {
-        #region Nested type: TheBehavior
         [TestFixture]
         public class TheBehavior
         {
@@ -37,16 +28,14 @@ namespace Orc.Memento.Tests
                 Assert.AreEqual(1, service.UndoBatches.Count());
             }
         }
-        #endregion
 
-        #region Nested type: TheConstructor
         [TestFixture]
         public class TheConstructor
         {
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyChanged()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ObjectObserver(null, null, new MementoService()));
+                Assert.Throws<ArgumentNullException>(() => new ObjectObserver(null, null, new MementoService()));
             }
 
             [TestCase]
@@ -61,6 +50,5 @@ namespace Orc.Memento.Tests
                 Assert.AreEqual(tag, observer.Tag);
             }
         }
-        #endregion
     }
 }

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyChangeUndo.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System;
     using Catel;
@@ -19,7 +12,6 @@ namespace Orc.Memento
     /// </remarks>
     public class PropertyChangeUndo : UndoBase
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyChangeUndo"/> class.
         /// </summary>
@@ -30,10 +22,10 @@ namespace Orc.Memento
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c>.</exception>
-        public PropertyChangeUndo(object target, string propertyName, object oldValue, object newValue = null, object tag = null)
+        public PropertyChangeUndo(object target, string propertyName, object? oldValue = null, object? newValue = null, object? tag = null)
             : base(target, tag)
         {
-            Argument.IsNotNull("target", target);
+            ArgumentNullException.ThrowIfNull(target);
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
 
             CanRedo = true;
@@ -41,9 +33,7 @@ namespace Orc.Memento
             OldValue = oldValue;
             NewValue = newValue;
         }
-        #endregion
-
-        #region Properties
+        
         /// <summary>
         /// Gets the name of the property.
         /// </summary>
@@ -54,16 +44,14 @@ namespace Orc.Memento
         /// Gets the old value.
         /// </summary>
         /// <value>The old value.</value>
-        public object OldValue { get; private set; }
+        public object? OldValue { get; private set; }
 
         /// <summary>
         /// Gets the new value.
         /// </summary>
         /// <value>The new value.</value>
-        public object NewValue { get; private set; }
-        #endregion
+        public object? NewValue { get; private set; }
 
-        #region Methods
         /// <summary>
         /// Method that will actually undo the action.
         /// </summary>
@@ -80,6 +68,5 @@ namespace Orc.Memento
         {
             PropertyHelper.SetPropertyValue(Target, PropertyName, NewValue, false);
         }
-        #endregion
     }
 }

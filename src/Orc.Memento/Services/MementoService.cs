@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MementoService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +15,6 @@ namespace Orc.Memento
     /// </summary>
     public class MementoService : IMementoService
     {
-        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -38,12 +31,10 @@ namespace Orc.Memento
 
         private readonly List<IMementoBatch> _undoBatches = new List<IMementoBatch>();
         private readonly List<IMementoBatch> _redoBatches = new List<IMementoBatch>();
-        private Batch _currentBatch;
+        private Batch? _currentBatch;
 
         private readonly Dictionary<object, ObserverBase> _observers = new Dictionary<object, ObserverBase>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class with the default number
         /// of supported undo and redo actions which is <see cref="DefaultMaximumSupportedActions"/>.
@@ -65,9 +56,7 @@ namespace Orc.Memento
 
             Log.Debug("Initialized MementoService with {0} supported batches", maximumSupportedBatches);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the default instance of the memento service.
         /// </summary>
@@ -170,9 +159,9 @@ namespace Orc.Memento
                 }
             }
         }
-        #endregion
 
-        #region Methods
+        public event EventHandler<MementoEventArgs>? Updated;
+
         /// <summary>
         /// Begins a new batch. 
         /// <para />
@@ -185,7 +174,7 @@ namespace Orc.Memento
         /// <param name="title">The title which can be used to display this batch i a user interface.</param>
         /// <param name="description">The description which can be used to display this batch i a user interface.</param>
         /// <returns>The <see cref="IMementoBatch" /> that has just been created.</returns>
-        public IMementoBatch BeginBatch(string title = null, string description = null)
+        public IMementoBatch BeginBatch(string title = "", string description = "")
         {
             EndBatch();
 
@@ -209,7 +198,7 @@ namespace Orc.Memento
         /// If there is currently no batch, this method will silently exit.
         /// </summary>
         /// <returns>The <see cref="IMementoBatch"/> that has just been ended or <c>null</c> if there was no current batch.</returns>
-        public IMementoBatch EndBatch()
+        public IMementoBatch? EndBatch()
         {
             if (_currentBatch is null)
             {
@@ -242,7 +231,7 @@ namespace Orc.Memento
 
             Log.Debug("Undoing action");
 
-            IMementoBatch undo = null;
+            IMementoBatch? undo = null;
 
             lock (_lock)
             {
@@ -305,7 +294,7 @@ namespace Orc.Memento
 
             Log.Debug("Redoing action");
 
-            IMementoBatch undo = null;
+            IMementoBatch? undo = null;
 
             lock (_lock)
             {
@@ -360,7 +349,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="operation"/> is <c>null</c>.</exception>
         public bool Add(IMementoSupport operation, bool noInsertIfExecutingOperation = true)
         {
-            Argument.IsNotNull("operation", operation);
+            ArgumentNullException.ThrowIfNull(operation);
 
             if (!IsEnabled)
             {
@@ -399,7 +388,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="batch"/> is <c>null</c>.</exception>
         public bool Add(IMementoBatch batch, bool noInsertIfExecutingOperation = true)
         {
-            Argument.IsNotNull("batch", batch);
+            ArgumentNullException.ThrowIfNull(batch);
 
             if (!IsEnabled)
             {
@@ -433,9 +422,9 @@ namespace Orc.Memento
         /// <param name="instance">The instance.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
-        public void RegisterObject(INotifyPropertyChanged instance, object tag = null)
+        public void RegisterObject(INotifyPropertyChanged instance, object? tag = null)
         {
-            Argument.IsNotNull("instance", instance);
+            ArgumentNullException.ThrowIfNull(instance);
 
             Log.Debug("Registering object of type '{0}' with tag '{1}'", instance.GetType().Name, TagHelper.ToString(tag));
 
@@ -458,7 +447,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         public void UnregisterObject(INotifyPropertyChanged instance)
         {
-            Argument.IsNotNull("instance", instance);
+            ArgumentNullException.ThrowIfNull(instance);
 
             Log.Debug("Unregistering object of type '{0}'", instance.GetType().Name);
 
@@ -484,9 +473,9 @@ namespace Orc.Memento
         /// <param name="collection">The collection.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
-        public void RegisterCollection(INotifyCollectionChanged collection, object tag = null)
+        public void RegisterCollection(INotifyCollectionChanged collection, object? tag = null)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             Log.Debug("Registering collection of type '{0}' with tag '{1}'", collection.GetType().Name, TagHelper.ToString(tag));
 
@@ -509,7 +498,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void UnregisterCollection(INotifyCollectionChanged collection)
         {
-            Argument.IsNotNull("collection", collection);
+            ArgumentNullException.ThrowIfNull(collection);
 
             Log.Debug("Unregistering collection of type '{0}'", collection.GetType().Name);
 
@@ -535,7 +524,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="obj"/> is <c>null</c>.</exception>
         private void ClearActionsForObject(object obj)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
 
             Log.Debug("Clearing actions for object of type '{0}'", obj.GetType().Name);
 
@@ -556,7 +545,8 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="obj"/> is <c>null</c>.</exception>
         private void ClearActionsForObjectList(List<IMementoBatch> list, object obj)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(list);
+            ArgumentNullException.ThrowIfNull(obj);
 
             if (list is null)
             {
@@ -584,7 +574,7 @@ namespace Orc.Memento
         /// collection where you are tracking changes to indexes inside it for example).
         /// </summary>
         /// <param name="instance">The instance to clear the events for. If <c>null</c>, all events will be removed.</param>
-        public void Clear(object instance = null)
+        public void Clear(object? instance = null)
         {
             if (instance is not null)
             {
@@ -606,8 +596,5 @@ namespace Orc.Memento
 
             Log.Debug("Cleared all actions");
         }
-        #endregion
-
-        public event EventHandler<MementoEventArgs> Updated;
     }
 }

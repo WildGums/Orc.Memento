@@ -1,26 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ActionUndo.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System;
-    using Catel;
 
     /// <summary>
     /// This class implements a generic undo using delegates.
     /// </summary>
     public class ActionUndo : UndoBase
     {
-        #region Fields
-        private readonly Action _redoAction;
+        private readonly Action? _redoAction;
         private readonly Action _undoAction;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionUndo" /> class.
         /// </summary>
@@ -30,19 +19,18 @@ namespace Orc.Memento
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="target" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="undoAction" /> is <c>null</c>.</exception>
-        public ActionUndo(object target, Action undoAction, Action redoAction = null, object tag = null)
+        public ActionUndo(object target, Action undoAction, Action? redoAction = null, object? tag = null)
             : base(target, tag)
         {
-            Argument.IsNotNull("undoAction", undoAction);
+            ArgumentNullException.ThrowIfNull(target);
+            ArgumentNullException.ThrowIfNull(undoAction);
 
             _undoAction = undoAction;
             _redoAction = redoAction;
 
             CanRedo = (_redoAction is not null);
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Method that will actually undo the action.
         /// </summary>
@@ -57,8 +45,7 @@ namespace Orc.Memento
         /// </summary>
         protected override void RedoAction()
         {
-            _redoAction.Invoke();
+            _redoAction?.Invoke();
         }
-        #endregion
     }
 }

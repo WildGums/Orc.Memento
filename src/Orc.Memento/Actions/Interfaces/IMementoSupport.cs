@@ -1,18 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMementoSupport.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     /// <summary>
     /// Interface that describes a single Undo/Redo operation.
     /// </summary>
     public interface IMementoSupport
     {
-        #region Properties
         /// <summary>
         /// Gets the target.
         /// </summary>
@@ -31,16 +23,14 @@ namespace Orc.Memento
         /// Gets or sets the tag which can be used to group operations by object.
         /// </summary>
         /// <value>The tag.</value>
-        object Tag { get; set; }
+        object? Tag { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the operation can be "reapplied" after undo.
         /// </summary>
         /// <value><c>true</c> if this instance can redo; otherwise, <c>false</c>.</value>
         bool CanRedo { get; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Method to undo the operation.
         /// </summary>
@@ -50,6 +40,5 @@ namespace Orc.Memento
         /// Method to redo the operation.
         /// </summary>
         void Redo();
-        #endregion
     }
 }

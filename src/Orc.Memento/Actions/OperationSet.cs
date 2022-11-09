@@ -1,13 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OperationSet.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
-    using Catel;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -17,11 +9,8 @@ namespace Orc.Memento
     /// </summary>
     public class OperationSet : UndoBase
     {
-        #region Fields
         private readonly List<IMementoSupport> _undoStack = new List<IMementoSupport>();
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="OperationSet"/> class.
         /// </summary>
@@ -29,7 +18,7 @@ namespace Orc.Memento
         /// <param name="operations">The operations.</param>
         /// <param name="tag">The tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
-        public OperationSet(object target, IEnumerable<IMementoSupport> operations = null, object tag = null)
+        public OperationSet(object target, IEnumerable<IMementoSupport>? operations = null, object? tag = null)
             : base(target, tag)
         {
             if (operations is not null)
@@ -37,9 +26,7 @@ namespace Orc.Memento
                 _undoStack.AddRange(operations);
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Adds a new undo operation to the collection.
         /// </summary>
@@ -47,7 +34,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="operation"/> is <c>null</c>.</exception>
         public void Add(IMementoSupport operation)
         {
-            Argument.IsNotNull("operation", operation);
+            ArgumentNullException.ThrowIfNull(operation);
 
             _undoStack.Add(operation);
 
@@ -61,7 +48,7 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="operations"/> is <c>null</c>.</exception>
         public void AddRange(IEnumerable<IMementoSupport> operations)
         {
-            Argument.IsNotNull("operations", operations);
+            ArgumentNullException.ThrowIfNull(operations);
 
             _undoStack.AddRange(operations);
 
@@ -95,6 +82,5 @@ namespace Orc.Memento
 
             CanRedo = _undoStack.All(op => op.CanRedo);
         }
-        #endregion
     }
 }

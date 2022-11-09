@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMementoBatch.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System.Collections.Generic;
 
@@ -14,7 +7,6 @@ namespace Orc.Memento
     /// </summary>
     public interface IMementoBatch
     {
-        #region Properties
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
@@ -56,9 +48,7 @@ namespace Orc.Memento
         /// </summary>
         /// <value><c>true</c> if at least one action in this batch can redo; otherwise, <c>false</c>.</value>
         bool CanRedo { get; }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Calls the <see cref="IMementoSupport.Undo"/> of all actions in this batch.
         /// </summary>
@@ -68,6 +58,5 @@ namespace Orc.Memento
         /// Calls the <see cref="IMementoSupport.Redo"/> of all actions in this batch.
         /// </summary>
         void Redo();
-        #endregion
     }
 }

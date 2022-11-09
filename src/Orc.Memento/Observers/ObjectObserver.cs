@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObjectObserver.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento
+﻿namespace Orc.Memento
 {
     using System;
     using System.Collections.Generic;
@@ -22,23 +15,18 @@ namespace Orc.Memento
     /// </summary>
     public class ObjectObserver : ObserverBase
     {
-        #region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
-
-        #region Fields
+ 
         /// <summary>
         /// Collection containing the previous values of the object.
         /// </summary>
         private readonly Dictionary<string, object> _previousPropertyValues = new Dictionary<string, object>();
 
-        private INotifyPropertyChanged _object;
-        #endregion
+        private INotifyPropertyChanged? _object;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ObjectObserver"/> class.
         /// </summary>
@@ -46,10 +34,10 @@ namespace Orc.Memento
         /// <param name="tag">The tag.</param>
         /// <param name="mementoService">The memento service. If <c>null</c>, the service will be retrieved from the <see cref="IServiceLocator"/>.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyChanged"/> is <c>null</c>.</exception>
-        public ObjectObserver(INotifyPropertyChanged propertyChanged, object tag = null, IMementoService mementoService = null)
+        public ObjectObserver(INotifyPropertyChanged propertyChanged, object? tag = null, IMementoService? mementoService = null)
             : base(tag, mementoService)
         {
-            Argument.IsNotNull("propertyChanged", propertyChanged);
+            ArgumentNullException.ThrowIfNull(propertyChanged);
 
             var propertyChangedType = propertyChanged.GetType();
 
@@ -62,9 +50,7 @@ namespace Orc.Memento
 
             Log.Debug("Initialized ObjectObserver for type '{0}'", propertyChangedType.Name);
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Called when a property has changed.
         /// </summary>
@@ -73,26 +59,37 @@ namespace Orc.Memento
         /// <remarks>
         /// This method must be public because the <see cref="IWeakEventListener"/> is used.
         /// </remarks>
-        public void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        public void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (sender is null)
+            {
+                return;
+            }
+
+            var propertyName = e.PropertyName;
+            if (string.IsNullOrWhiteSpace(propertyName))
+            {
+                return;
+            }
+
             var modelBase = sender as ModelBase;
             if (modelBase is not null)
             {
-                if ((string.CompareOrdinal(e.PropertyName, "INotifyDataErrorInfo.HasErrors") == 0) ||
-                    (string.CompareOrdinal(e.PropertyName, "INotifyDataWarningInfo.HasWarnings") == 0) ||
-                    (string.CompareOrdinal(e.PropertyName, "IsDirty") == 0))
+                if ((string.CompareOrdinal(propertyName, "INotifyDataErrorInfo.HasErrors") == 0) ||
+                    (string.CompareOrdinal(propertyName, "INotifyDataWarningInfo.HasWarnings") == 0) ||
+                    (string.CompareOrdinal(propertyName, "IsDirty") == 0))
                 {
                     return;
                 }
             }
 
-            if (ShouldPropertyBeIgnored(sender, e.PropertyName))
+            if (ShouldPropertyBeIgnored(sender, propertyName))
             {
                 return;
             }
 
-            var oldValue = _previousPropertyValues[e.PropertyName];
-            var newValue = PropertyHelper.GetPropertyValue(sender, e.PropertyName, false);
+            var oldValue = _previousPropertyValues[propertyName];
+            var newValue = PropertyHelper.GetPropertyValue(sender, propertyName, false);
 
             // CTL-719: ignore duplicate properties
             if (ObjectHelper.AreEqual(oldValue, newValue))
@@ -100,9 +97,9 @@ namespace Orc.Memento
                 return;
             }
 
-            _previousPropertyValues[e.PropertyName] = newValue;
+            _previousPropertyValues[propertyName] = newValue;
 
-            MementoService.Add(new PropertyChangeUndo(sender, e.PropertyName, oldValue, newValue, Tag));
+            MementoService.Add(new PropertyChangeUndo(sender, propertyName, oldValue, newValue, Tag));
         }
 
         /// <summary>
@@ -112,10 +109,11 @@ namespace Orc.Memento
         /// <exception cref="ArgumentNullException">The <paramref name="obj"/> is <c>null</c>.</exception>
         private void InitializeDefaultValues(object obj)
         {
-            Argument.IsNotNull("obj", obj);
+            ArgumentNullException.ThrowIfNull(obj);
 
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, false);
             var properties = obj.GetType().GetPropertiesEx(bindingFlags);
+
             foreach (var property in properties)
             {
                 if (!ShouldPropertyBeIgnored(obj, property.Name))
@@ -131,10 +129,25 @@ namespace Orc.Memento
         /// <param name="obj">The object.</param>
         /// <param name="propertyName">Name of the property to check.</param>
         /// <returns><c>true</c> if the property should be ignored; otherwise <c>false</c>.</returns>
-        private bool ShouldPropertyBeIgnored(object obj, string propertyName)
+        private bool ShouldPropertyBeIgnored(object? obj, string? propertyName)
         {
+            if (obj is null)
+            {
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(propertyName))
+            {
+                return true;
+            }
+
             var objectType = obj.GetType();
             var propertyInfo = objectType.GetPropertyEx(propertyName);
+            if (propertyInfo is null)
+            {
+                return true;
+            }
+
             var ignore = propertyInfo.IsDecoratedWithAttribute<IgnoreMementoSupportAttribute>();
             if (ignore)
             {
@@ -161,6 +174,5 @@ namespace Orc.Memento
 
             Log.Debug("Canceled property change subscription");
         }
-        #endregion
     }
 }

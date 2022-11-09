@@ -1,18 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="App.xaml.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.Memento.Example
+﻿namespace Orc.Memento.Example
 {
     using System.Globalization;
     using System.Windows;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;
-    using Catel.Windows;
     using Orchestra;
 
     /// <summary>
@@ -29,7 +21,7 @@ namespace Orc.Memento.Example
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+            var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
 
             // Note: it's best to use .CurrentUICulture in actual apps since it will use the preferred language
             // of the user. But in order to demo multilingual features for devs (who mostly have en-US as .CurrentUICulture),
