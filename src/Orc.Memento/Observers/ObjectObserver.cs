@@ -23,7 +23,7 @@ public class ObjectObserver : ObserverBase
     /// <summary>
     /// Collection containing the previous values of the object.
     /// </summary>
-    private readonly Dictionary<string, object> _previousPropertyValues = new Dictionary<string, object>();
+    private readonly Dictionary<string, object> _previousPropertyValues = new();
 
     private INotifyPropertyChanged? _object;
 
@@ -72,12 +72,11 @@ public class ObjectObserver : ObserverBase
             return;
         }
 
-        var modelBase = sender as ModelBase;
-        if (modelBase is not null)
+        if (sender is ModelBase modelBase)
         {
-            if ((string.CompareOrdinal(propertyName, "INotifyDataErrorInfo.HasErrors") == 0) ||
-                (string.CompareOrdinal(propertyName, "INotifyDataWarningInfo.HasWarnings") == 0) ||
-                (string.CompareOrdinal(propertyName, "IsDirty") == 0))
+            if (string.CompareOrdinal(propertyName, "INotifyDataErrorInfo.HasErrors") == 0 ||
+                string.CompareOrdinal(propertyName, "INotifyDataWarningInfo.HasWarnings") == 0 ||
+                string.CompareOrdinal(propertyName, "IsDirty") == 0)
             {
                 return;
             }
@@ -89,7 +88,7 @@ public class ObjectObserver : ObserverBase
         }
 
         var oldValue = _previousPropertyValues[propertyName];
-        var newValue = PropertyHelper.GetPropertyValue(sender, propertyName, false);
+        var newValue = PropertyHelper.GetPropertyValue(sender, propertyName);
 
         // CTL-719: ignore duplicate properties
         if (ObjectHelper.AreEqual(oldValue, newValue))
@@ -118,7 +117,7 @@ public class ObjectObserver : ObserverBase
         {
             if (!ShouldPropertyBeIgnored(obj, property.Name))
             {
-                _previousPropertyValues[property.Name] = PropertyHelper.GetPropertyValue(obj, property.Name, false);
+                _previousPropertyValues[property.Name] = PropertyHelper.GetPropertyValue(obj, property.Name);
             }
         }
     }
