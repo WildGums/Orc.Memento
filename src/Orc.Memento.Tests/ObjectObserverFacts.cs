@@ -1,54 +1,53 @@
-﻿namespace Orc.Memento.Tests
+﻿namespace Orc.Memento.Tests;
+
+using System;
+using System.Linq;
+using NUnit.Framework;
+
+public class ObjectObserverFacts
 {
-    using System;
-    using System.Linq;
-    using NUnit.Framework;
-
-    public class ObjectObserverFacts
+    [TestFixture]
+    public class TheBehavior
     {
-        [TestFixture]
-        public class TheBehavior
+        [TestCase]
+        public void CorrectlyIgnoresDuplicatePropertyChangesWithEqualValues()
         {
-            [TestCase]
-            public void CorrectlyIgnoresDuplicatePropertyChangesWithEqualValues()
-            {
-                var obj = new Mocks.MockModel();
+            var obj = new Mocks.MockModel();
 
-                var service = new MementoService();
-                var observer = new ObjectObserver(obj, mementoService: service);
+            var service = new MementoService();
+            var observer = new ObjectObserver(obj, mementoService: service);
 
-                Assert.AreEqual(0, service.UndoBatches.Count());
+            Assert.AreEqual(0, service.UndoBatches.Count());
 
-                obj.Value = "A";
+            obj.Value = "A";
 
-                Assert.AreEqual(1, service.UndoBatches.Count());
+            Assert.AreEqual(1, service.UndoBatches.Count());
 
-                obj.Value = "A";
+            obj.Value = "A";
 
-                Assert.AreEqual(1, service.UndoBatches.Count());
-            }
+            Assert.AreEqual(1, service.UndoBatches.Count());
+        }
+    }
+
+    [TestFixture]
+    public class TheConstructor
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullPropertyChanged()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ObjectObserver(null, null, new MementoService()));
         }
 
-        [TestFixture]
-        public class TheConstructor
+        [TestCase]
+        public void SetsValuesCorrectly()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullPropertyChanged()
-            {
-                Assert.Throws<ArgumentNullException>(() => new ObjectObserver(null, null, new MementoService()));
-            }
+            var obj = new Mocks.MockModel();
+            const string tag = "MyTag";
 
-            [TestCase]
-            public void SetsValuesCorrectly()
-            {
-                var obj = new Mocks.MockModel();
-                var tag = "MyTag";
+            var service = new MementoService();
+            var observer = new ObjectObserver(obj, tag, service);
 
-                var service = new MementoService();
-                var observer = new ObjectObserver(obj, tag, service);
-
-                Assert.AreEqual(tag, observer.Tag);
-            }
+            Assert.AreEqual(tag, observer.Tag);
         }
     }
 }

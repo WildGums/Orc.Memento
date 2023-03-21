@@ -1,12 +1,11 @@
-﻿namespace Orc.Memento.Example.Views
+﻿namespace Orc.Memento.Example.Views;
+
+public partial class MainWindow 
 {
-    public partial class MainWindow 
+    #region Constructors
+    public MainWindow()
     {
-        #region Constructors
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-        #endregion
+        InitializeComponent();
     }
+    #endregion
 }

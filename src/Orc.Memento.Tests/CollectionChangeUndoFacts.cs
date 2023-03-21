@@ -1,70 +1,69 @@
-﻿namespace Orc.Memento.Tests
+﻿namespace Orc.Memento.Tests;
+
+using System;
+using System.Collections.Generic;
+using Catel.Collections;
+using NUnit.Framework;
+
+public class CollectionChangeUndoFacts
 {
-    using System;
-    using System.Collections.Generic;
-    using Catel.Collections;
-    using NUnit.Framework;
-
-    public class CollectionChangeUndoFacts
+    [TestFixture]
+    public class TheConstructor
     {
-        [TestFixture]
-        public class TheConstructor
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullInstance()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullInstance()
-            {
-                Assert.Throws<ArgumentNullException>(() => new CollectionChangeUndo(null, CollectionChangeType.Add, 0, 0, null, null));
-            }
-
-            [TestCase]
-            public void SetsValuesCorrectly()
-            {
-                var table = new List<object>();
-                var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 0, "currentValue", "nextValue");
-
-                Assert.IsNotNull(collectionChangeUndo.Collection);
-                Assert.AreEqual(CollectionChangeType.Add, collectionChangeUndo.ChangeType);
-                Assert.AreEqual(table, collectionChangeUndo.Collection);
-                Assert.AreEqual("currentValue", collectionChangeUndo.OldValue);
-                Assert.AreEqual("nextValue", collectionChangeUndo.NewValue);
-                Assert.AreEqual(true, collectionChangeUndo.CanRedo);
-            }
+            Assert.Throws<ArgumentNullException>(() => new CollectionChangeUndo(null, CollectionChangeType.Add, 0, 0, null, null));
         }
 
-        [TestFixture]
-        public class TheRedoMethod
+        [TestCase]
+        public void SetsValuesCorrectly()
         {
-            [TestCase]
-            public void HandlesCollectionAddCorrectly()
-            {
-                var table = new List<string>();
-                var tableAfter = new List<string>(new[] {"currentValue"});
+            var table = new List<object>();
+            var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 0, "currentValue", "nextValue");
 
-                var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 1, null, "currentValue");
-                collectionChangeUndo.Redo();
+            Assert.IsNotNull(collectionChangeUndo.Collection);
+            Assert.AreEqual(CollectionChangeType.Add, collectionChangeUndo.ChangeType);
+            Assert.AreEqual(table, collectionChangeUndo.Collection);
+            Assert.AreEqual("currentValue", collectionChangeUndo.OldValue);
+            Assert.AreEqual("nextValue", collectionChangeUndo.NewValue);
+            Assert.AreEqual(true, collectionChangeUndo.CanRedo);
+        }
+    }
 
-                Assert.IsTrue(CollectionHelper.IsEqualTo(table, tableAfter));
-            }
+    [TestFixture]
+    public class TheRedoMethod
+    {
+        [TestCase]
+        public void HandlesCollectionAddCorrectly()
+        {
+            var table = new List<string>();
+            var tableAfter = new List<string>(new[] {"currentValue"});
 
-            // TODO: Write replace, remove, move
+            var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 1, null, "currentValue");
+            collectionChangeUndo.Redo();
+
+            Assert.IsTrue(CollectionHelper.IsEqualTo(table, tableAfter));
         }
 
-        [TestFixture]
-        public class TheUndoMethod
+        // TODO: Write replace, remove, move
+    }
+
+    [TestFixture]
+    public class TheUndoMethod
+    {
+        [TestCase]
+        public void HandlesCollectionAddCorrectly()
         {
-            [TestCase]
-            public void HandlesCollectionAddCorrectly()
-            {
-                var table = new List<string>(new[] {"currentValue"});
-                var tableAfter = new List<string>();
+            var table = new List<string>(new[] {"currentValue"});
+            var tableAfter = new List<string>();
 
-                var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 1, null, "currentValue");
-                collectionChangeUndo.Undo();
+            var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 1, null, "currentValue");
+            collectionChangeUndo.Undo();
 
-                Assert.IsTrue(CollectionHelper.IsEqualTo(table, tableAfter));
-            }
-
-            // TODO: Write replace, remove, move
+            Assert.IsTrue(CollectionHelper.IsEqualTo(table, tableAfter));
         }
+
+        // TODO: Write replace, remove, move
     }
 }
