@@ -20,15 +20,15 @@ public class MementoServiceFacts
 
             var firstBatch = mementoService.BeginBatch("FirstBatch");
             mementoService.Add(new PropertyChangeUndo(model, "Value", model.Value));
-            Assert.AreEqual(1, firstBatch.ActionCount);
+            Assert.That(firstBatch.ActionCount, Is.EqualTo(1));
 
             var secondBatch = mementoService.BeginBatch("SecondBatch");
             mementoService.Add(new PropertyChangeUndo(model, "Value", model.Value));
-            Assert.AreEqual(1, secondBatch.ActionCount);
+            Assert.That(secondBatch.ActionCount, Is.EqualTo(1));
 
             // Also check if the first batch was closed
-            Assert.AreEqual(1, mementoService.UndoBatches.Count());
-            Assert.AreEqual(1, firstBatch.ActionCount);
+            Assert.That(mementoService.UndoBatches.Count(), Is.EqualTo(1));
+            Assert.That(firstBatch.ActionCount, Is.EqualTo(1));
         }
 
         [TestCase]
@@ -50,7 +50,7 @@ public class MementoServiceFacts
 
             mementoBatch.Undo();
 
-            Assert.AreEqual(originalNumber, model.Value);
+            Assert.That(model.Value, Is.EqualTo(originalNumber));
         }
     }
     #endregion
@@ -70,7 +70,7 @@ public class MementoServiceFacts
         public void ExpectDefaultMaximumSupportedActionsValue()
         {
             var mementoService = new MementoService();
-            Assert.AreEqual(300, mementoService.MaximumSupportedBatches);
+            Assert.That(mementoService.MaximumSupportedBatches, Is.EqualTo(300));
         }
         #endregion
     }
@@ -88,14 +88,14 @@ public class MementoServiceFacts
 
             var firstBatch = mementoService.BeginBatch("FirstBatch");
             mementoService.Add(new PropertyChangeUndo(model, "Value", model.Value));
-            Assert.AreEqual(1, firstBatch.ActionCount);
+            Assert.That(firstBatch.ActionCount, Is.EqualTo(1));
 
             var secondBatch = mementoService.BeginBatch("SecondBatch");
             mementoService.Add(new PropertyChangeUndo(model, "Value", model.Value));
-            Assert.AreEqual(1, secondBatch.ActionCount);
+            Assert.That(secondBatch.ActionCount, Is.EqualTo(1));
             mementoService.EndBatch();
 
-            Assert.AreEqual(2, mementoService.UndoBatches.Count());
+            Assert.That(mementoService.UndoBatches.Count(), Is.EqualTo(2));
         }
     }
     #endregion
@@ -109,7 +109,7 @@ public class MementoServiceFacts
         {
             var mementoService = new MementoService();
 
-            Assert.IsTrue(mementoService.IsEnabled);
+            Assert.That(mementoService.IsEnabled, Is.True);
         }
 
         [TestCase]
@@ -121,7 +121,7 @@ public class MementoServiceFacts
             var undo1 = new MockUndo(true);
             mementoService.Add(undo1);
 
-            Assert.IsFalse(mementoService.CanRedo);
+            Assert.That(mementoService.CanRedo, Is.False);
         }
     }
     #endregion
@@ -153,15 +153,15 @@ public class MementoServiceFacts
 
             for (var i = 0; i < 5; i++)
             {
-                Assert.IsFalse(listUndoOps[i].UndoCalled);
+                Assert.That(listUndoOps[i].UndoCalled, Is.False);
             }
 
             for (var i = 5; i < 10; i++)
             {
-                Assert.IsTrue(listUndoOps[i].UndoCalled);
+                Assert.That(listUndoOps[i].UndoCalled, Is.True);
             }
 
-            Assert.AreEqual(count, mementoService.MaximumSupportedBatches);
+            Assert.That(mementoService.MaximumSupportedBatches, Is.EqualTo(count));
         }
         #endregion
     }
@@ -180,13 +180,13 @@ public class MementoServiceFacts
 
             mementoService.Add(undo1);
             mementoService.Undo();
-            Assert.IsTrue(undo1.UndoCalled);
-            Assert.IsFalse(undo1.RedoCalled);
-            Assert.IsTrue(mementoService.CanRedo);
+            Assert.That(undo1.UndoCalled, Is.True);
+            Assert.That(undo1.RedoCalled, Is.False);
+            Assert.That(mementoService.CanRedo, Is.True);
 
             mementoService.Redo();
-            Assert.IsTrue(undo1.RedoCalled);
-            Assert.IsFalse(mementoService.CanRedo);
+            Assert.That(undo1.RedoCalled, Is.True);
+            Assert.That(mementoService.CanRedo, Is.False);
         }
 
         [TestCase]
@@ -200,40 +200,40 @@ public class MementoServiceFacts
             obj.Value = "value3";
 
             service.Undo();
-            Assert.AreEqual("value2", obj.Value);
+            Assert.That(obj.Value, Is.EqualTo("value2"));
 
             service.Undo();
-            Assert.AreEqual("value1", obj.Value);
+            Assert.That(obj.Value, Is.EqualTo("value1"));
 
             service.Redo();
-            Assert.AreEqual("value2", obj.Value);
+            Assert.That(obj.Value, Is.EqualTo("value2"));
 
             service.Redo();
-            Assert.AreEqual("value3", obj.Value);
+            Assert.That(obj.Value, Is.EqualTo("value3"));
         }
 
         [TestCase]
         public void CanRedoTest()
         {
             var mementoService = new MementoService();
-            Assert.IsFalse(mementoService.CanUndo);
+            Assert.That(mementoService.CanUndo, Is.False);
 
             mementoService.Add(new MockUndo());
-            Assert.IsTrue(mementoService.CanUndo);
+            Assert.That(mementoService.CanUndo, Is.True);
 
             mementoService.Undo();
-            Assert.IsFalse(mementoService.CanRedo);
+            Assert.That(mementoService.CanRedo, Is.False);
 
             mementoService.Add(new MockUndo(true));
-            Assert.IsTrue(mementoService.CanUndo);
+            Assert.That(mementoService.CanUndo, Is.True);
 
             mementoService.Undo();
-            Assert.IsFalse(mementoService.CanUndo);
-            Assert.IsTrue(mementoService.CanRedo);
+            Assert.That(mementoService.CanUndo, Is.False);
+            Assert.That(mementoService.CanRedo, Is.True);
 
             mementoService.Redo();
-            Assert.IsTrue(mementoService.CanUndo);
-            Assert.IsFalse(mementoService.CanRedo);
+            Assert.That(mementoService.CanUndo, Is.True);
+            Assert.That(mementoService.CanRedo, Is.False);
         }
 
         [TestCase(1)]
@@ -266,7 +266,7 @@ public class MementoServiceFacts
                 mementoService.Redo();
             }
 
-            Assert.AreEqual(actionsCount, raisedEventsCount);
+            Assert.That(raisedEventsCount, Is.EqualTo(actionsCount));
         }
 
         #endregion
@@ -289,9 +289,9 @@ public class MementoServiceFacts
             mementoService.Add(undo2);
 
             mementoService.Undo();
-            Assert.IsTrue(undo2.UndoCalled);
-            Assert.IsFalse(undo1.UndoCalled);
-            Assert.IsTrue(mementoService.CanUndo);
+            Assert.That(undo2.UndoCalled, Is.True);
+            Assert.That(undo1.UndoCalled, Is.False);
+            Assert.That(mementoService.CanUndo, Is.True);
         }
 
         [TestCase]
@@ -306,23 +306,23 @@ public class MementoServiceFacts
             obj.Value = "value3";
 
             service.Undo();
-            Assert.AreEqual("value2", obj.Value);
+            Assert.That(obj.Value, Is.EqualTo("value2"));
 
             service.Undo();
-            Assert.AreEqual("value1", obj.Value);
+            Assert.That(obj.Value, Is.EqualTo("value1"));
         }
 
         [TestCase]
         public void CanUndoTest()
         {
             var mementoService = new MementoService();
-            Assert.IsFalse(mementoService.CanUndo);
+            Assert.That(mementoService.CanUndo, Is.False);
 
             mementoService.Add(new MockUndo());
-            Assert.IsTrue(mementoService.CanUndo);
+            Assert.That(mementoService.CanUndo, Is.True);
 
             mementoService.Undo();
-            Assert.IsFalse(mementoService.CanUndo);
+            Assert.That(mementoService.CanUndo, Is.False);
         }
 
         [TestCase(1)]
@@ -350,7 +350,7 @@ public class MementoServiceFacts
                 mementoService.Undo();
             }
 
-            Assert.AreEqual(actionsCount, raisedEventsCount);
+            Assert.That(raisedEventsCount, Is.EqualTo(actionsCount));
         }
 
         #endregion
@@ -381,7 +381,7 @@ public class MementoServiceFacts
 
             obj.Value = "newvalue";
 
-            Assert.IsFalse(service.CanUndo);
+            Assert.That(service.CanUndo, Is.False);
         }
 
         [TestCase]
@@ -393,11 +393,11 @@ public class MementoServiceFacts
             service.RegisterObject(obj);
 
             obj.Value = "newvalue1";
-            Assert.IsFalse(service.CanRedo);
+            Assert.That(service.CanRedo, Is.False);
 
             service.UnregisterObject(obj);
 
-            Assert.IsFalse(service.CanUndo);
+            Assert.That(service.CanUndo, Is.False);
         }
         #endregion
     }
@@ -425,7 +425,7 @@ public class MementoServiceFacts
 
             mementoService.Add(undo1);
 
-            Assert.IsTrue(success);
+            Assert.That(success, Is.True);
         }
 
         [TestCase]
@@ -445,7 +445,7 @@ public class MementoServiceFacts
 
             mementoService.Clear();
 
-            Assert.IsTrue(success);
+            Assert.That(success, Is.True);
         }
     }
 }

@@ -21,8 +21,8 @@ public class OperationSetFacts
 
             operationSet.Undo();
 
-            Assert.IsTrue(mock1.UndoCalled);
-            Assert.IsTrue(mock2.UndoCalled);
+            Assert.That(mock1.UndoCalled, Is.True);
+            Assert.That(mock2.UndoCalled, Is.True);
         }
 
         [TestCase]
@@ -38,8 +38,8 @@ public class OperationSetFacts
 
             operationSet.Undo();
 
-            Assert.IsTrue(mock1.UndoCalled);
-            Assert.AreEqual(1, finalValue);
+            Assert.That(mock1.UndoCalled, Is.True);
+            Assert.That(finalValue, Is.EqualTo(1));
         }
     }
     #endregion
@@ -58,7 +58,7 @@ public class OperationSetFacts
             operationSet.Add(mock1);
             operationSet.Add(mock2);
 
-            Assert.IsTrue(operationSet.CanRedo);
+            Assert.That(operationSet.CanRedo, Is.True);
         }
 
         [TestCase]
@@ -71,7 +71,7 @@ public class OperationSetFacts
             operationSet.Add(mock1);
             operationSet.Add(mock2);
 
-            Assert.IsFalse(operationSet.CanRedo);
+            Assert.That(operationSet.CanRedo, Is.False);
         }
 
         [TestCase]
@@ -85,8 +85,8 @@ public class OperationSetFacts
             operationSet.Add(mock2);
 
             operationSet.Redo();
-            Assert.IsTrue(mock1.RedoCalled);
-            Assert.IsTrue(mock2.RedoCalled);
+            Assert.That(mock1.RedoCalled, Is.True);
+            Assert.That(mock2.RedoCalled, Is.True);
         }
     }
     #endregion

@@ -18,13 +18,13 @@ public class ActionUndoFacts
             var action = new ActionUndo(this, () => value = true, () => value = false);
 
             mementoService.Add(action);
-            Assert.IsFalse(value);
+            Assert.That(value, Is.False);
 
             mementoService.Undo();
-            Assert.IsTrue(value);
+            Assert.That(value, Is.True);
 
             mementoService.Redo();
-            Assert.IsFalse(value);
+            Assert.That(value, Is.False);
         }
 
         [TestCase]
@@ -35,13 +35,13 @@ public class ActionUndoFacts
             var mementoService = new MementoService();
 
             mementoService.Add(action);
-            Assert.AreEqual(MockCatelModel.ValueProperty.GetDefaultValue(), instance.Value);
+            Assert.That(instance.Value, Is.EqualTo(MockCatelModel.ValueProperty.GetDefaultValue()));
 
             mementoService.Undo();
-            Assert.AreEqual("previousValue", instance.Value);
+            Assert.That(instance.Value, Is.EqualTo("previousValue"));
 
             mementoService.Redo();
-            Assert.AreEqual("nextValue", instance.Value);
+            Assert.That(instance.Value, Is.EqualTo("nextValue"));
         }
     }
     #endregion
@@ -76,7 +76,7 @@ public class ActionUndoFacts
             var action = new ActionUndo(this, () => MockModel.Change("previousValue"));
 
             action.Undo();
-            Assert.AreEqual("previousValue", MockModel.Name);
+            Assert.That(MockModel.Name, Is.EqualTo("previousValue"));
         }
 
         [TestCase]
@@ -85,7 +85,7 @@ public class ActionUndoFacts
             var action = new ActionUndo(this, () => MockModel.Change("previousValue"), () => MockModel.Change("nextValue"));
 
             action.Redo();
-            Assert.AreEqual("nextValue", MockModel.Name);
+            Assert.That(MockModel.Name, Is.EqualTo("nextValue"));
         }
 
         [TestCase]
@@ -94,13 +94,13 @@ public class ActionUndoFacts
             var action = new ActionUndo(this, () => MockModel.Change("previousValue"), () => MockModel.Change("nextValue"));
 
             action.Undo();
-            Assert.AreEqual("previousValue", MockModel.Name);
+            Assert.That(MockModel.Name, Is.EqualTo("previousValue"));
 
             action.Redo();
-            Assert.AreEqual("nextValue", MockModel.Name);
+            Assert.That(MockModel.Name, Is.EqualTo("nextValue"));
 
             action.Undo();
-            Assert.AreEqual("previousValue", MockModel.Name);
+            Assert.That(MockModel.Name, Is.EqualTo("previousValue"));
         }
     }
     #endregion

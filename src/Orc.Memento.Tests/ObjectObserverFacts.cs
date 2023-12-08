@@ -17,15 +17,15 @@ public class ObjectObserverFacts
             var service = new MementoService();
             var observer = new ObjectObserver(obj, mementoService: service);
 
-            Assert.AreEqual(0, service.UndoBatches.Count());
+            Assert.That(service.UndoBatches.Count(), Is.EqualTo(0));
 
             obj.Value = "A";
 
-            Assert.AreEqual(1, service.UndoBatches.Count());
+            Assert.That(service.UndoBatches.Count(), Is.EqualTo(1));
 
             obj.Value = "A";
 
-            Assert.AreEqual(1, service.UndoBatches.Count());
+            Assert.That(service.UndoBatches.Count(), Is.EqualTo(1));
         }
     }
 
@@ -47,7 +47,7 @@ public class ObjectObserverFacts
             var service = new MementoService();
             var observer = new ObjectObserver(obj, tag, service);
 
-            Assert.AreEqual(tag, observer.Tag);
+            Assert.That(observer.Tag, Is.EqualTo(tag));
         }
     }
 }

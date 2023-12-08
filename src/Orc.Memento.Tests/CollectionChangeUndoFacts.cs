@@ -22,12 +22,12 @@ public class CollectionChangeUndoFacts
             var table = new List<object>();
             var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 0, "currentValue", "nextValue");
 
-            Assert.IsNotNull(collectionChangeUndo.Collection);
-            Assert.AreEqual(CollectionChangeType.Add, collectionChangeUndo.ChangeType);
-            Assert.AreEqual(table, collectionChangeUndo.Collection);
-            Assert.AreEqual("currentValue", collectionChangeUndo.OldValue);
-            Assert.AreEqual("nextValue", collectionChangeUndo.NewValue);
-            Assert.AreEqual(true, collectionChangeUndo.CanRedo);
+            Assert.That(collectionChangeUndo.Collection, Is.Not.Null);
+            Assert.That(collectionChangeUndo.ChangeType, Is.EqualTo(CollectionChangeType.Add));
+            Assert.That(collectionChangeUndo.Collection, Is.EqualTo(table));
+            Assert.That(collectionChangeUndo.OldValue, Is.EqualTo("currentValue"));
+            Assert.That(collectionChangeUndo.NewValue, Is.EqualTo("nextValue"));
+            Assert.That(collectionChangeUndo.CanRedo, Is.EqualTo(true));
         }
     }
 
@@ -43,7 +43,7 @@ public class CollectionChangeUndoFacts
             var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 1, null, "currentValue");
             collectionChangeUndo.Redo();
 
-            Assert.IsTrue(CollectionHelper.IsEqualTo(table, tableAfter));
+            Assert.That(CollectionHelper.IsEqualTo(table, tableAfter), Is.True);
         }
 
         // TODO: Write replace, remove, move
@@ -61,7 +61,7 @@ public class CollectionChangeUndoFacts
             var collectionChangeUndo = new CollectionChangeUndo(table, CollectionChangeType.Add, 0, 1, null, "currentValue");
             collectionChangeUndo.Undo();
 
-            Assert.IsTrue(CollectionHelper.IsEqualTo(table, tableAfter));
+            Assert.That(CollectionHelper.IsEqualTo(table, tableAfter), Is.True);
         }
 
         // TODO: Write replace, remove, move

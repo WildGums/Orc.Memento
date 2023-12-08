@@ -30,12 +30,12 @@ public class PropertyChangeUndoFacts
             var obj = new {MyProperty = "currentValue"};
 
             var propertyChangeUndo = new PropertyChangeUndo(obj, "MyProperty", "currentValue", "nextValue");
-            Assert.AreEqual("currentValue", obj.MyProperty);
-            Assert.AreEqual("MyProperty", propertyChangeUndo.PropertyName);
-            Assert.AreEqual(obj, propertyChangeUndo.Target);
-            Assert.AreEqual("currentValue", propertyChangeUndo.OldValue);
-            Assert.AreEqual("nextValue", propertyChangeUndo.NewValue);
-            Assert.AreEqual(true, propertyChangeUndo.CanRedo);
+            Assert.That(obj.MyProperty, Is.EqualTo("currentValue"));
+            Assert.That(propertyChangeUndo.PropertyName, Is.EqualTo("MyProperty"));
+            Assert.That(propertyChangeUndo.Target, Is.EqualTo(obj));
+            Assert.That(propertyChangeUndo.OldValue, Is.EqualTo("currentValue"));
+            Assert.That(propertyChangeUndo.NewValue, Is.EqualTo("nextValue"));
+            Assert.That(propertyChangeUndo.CanRedo, Is.EqualTo(true));
         }
     }
 
@@ -50,7 +50,7 @@ public class PropertyChangeUndoFacts
             var propertyChangeUndo = new PropertyChangeUndo(obj, "Value", "previousValue", "nextValue");
             propertyChangeUndo.Redo();
 
-            Assert.AreEqual("nextValue", obj.Value);
+            Assert.That(obj.Value, Is.EqualTo("nextValue"));
         }
     }
 
@@ -65,7 +65,7 @@ public class PropertyChangeUndoFacts
             var propertyChangeUndo = new PropertyChangeUndo(obj, "Value", "previousValue", "nextValue");
             propertyChangeUndo.Undo();
 
-            Assert.AreEqual("previousValue", obj.Value);
+            Assert.That(obj.Value, Is.EqualTo("previousValue"));
         }
     }
 }

@@ -13,7 +13,7 @@ public class BatchFacts
         {
             var batch = new Batch();
 
-            Assert.AreEqual(0, batch.ActionCount);
+            Assert.That(batch.ActionCount, Is.EqualTo(0));
         }
 
         [TestCase]
@@ -24,7 +24,7 @@ public class BatchFacts
             var batch = new Batch();
             batch.AddAction(new PropertyChangeUndo(model, "Value", model.Value));
 
-            Assert.AreEqual(1, batch.ActionCount);
+            Assert.That(batch.ActionCount, Is.EqualTo(1));
         }
     }
     #endregion
@@ -41,7 +41,7 @@ public class BatchFacts
             var batch = new Batch();
             batch.AddAction(new ActionUndo(model1, () => model1.Value = "Value"));
 
-            Assert.IsFalse(batch.CanRedo);
+            Assert.That(batch.CanRedo, Is.False);
         }
 
         [TestCase]
@@ -54,7 +54,7 @@ public class BatchFacts
             batch.AddAction(new PropertyChangeUndo(model1, "Value", model1.Value));
             batch.AddAction(new PropertyChangeUndo(model2, "Value", model2.Value));
 
-            Assert.IsTrue(batch.CanRedo);
+            Assert.That(batch.CanRedo, Is.True);
         }
     }
     #endregion
@@ -68,7 +68,7 @@ public class BatchFacts
         {
             var batch = new Batch();
 
-            Assert.IsTrue(batch.IsEmptyBatch);
+            Assert.That(batch.IsEmptyBatch, Is.True);
         }
 
         [TestCase]
@@ -79,7 +79,7 @@ public class BatchFacts
             var batch = new Batch();
             batch.AddAction(new PropertyChangeUndo(model, "Value", model.Value));
 
-            Assert.IsFalse(batch.IsEmptyBatch);
+            Assert.That(batch.IsEmptyBatch, Is.False);
         }
 
         [TestCase]
@@ -92,7 +92,7 @@ public class BatchFacts
             batch.AddAction(new PropertyChangeUndo(model1, "Value", model1.Value));
             batch.AddAction(new PropertyChangeUndo(model2, "Value", model2.Value));
 
-            Assert.IsFalse(batch.IsEmptyBatch);
+            Assert.That(batch.IsEmptyBatch, Is.False);
         }
     }
     #endregion
@@ -106,7 +106,7 @@ public class BatchFacts
         {
             var batch = new Batch();
 
-            Assert.IsFalse(batch.IsSingleActionBatch);
+            Assert.That(batch.IsSingleActionBatch, Is.False);
         }
 
         [TestCase]
@@ -117,7 +117,7 @@ public class BatchFacts
             var batch = new Batch();
             batch.AddAction(new PropertyChangeUndo(model, "Value", model.Value));
 
-            Assert.IsTrue(batch.IsSingleActionBatch);
+            Assert.That(batch.IsSingleActionBatch, Is.True);
         }
 
         [TestCase]
@@ -130,7 +130,7 @@ public class BatchFacts
             batch.AddAction(new PropertyChangeUndo(model1, "Value", model1.Value));
             batch.AddAction(new PropertyChangeUndo(model2, "Value", model2.Value));
 
-            Assert.IsFalse(batch.IsSingleActionBatch);
+            Assert.That(batch.IsSingleActionBatch, Is.False);
         }
     }
     #endregion
