@@ -6,7 +6,8 @@
               xmlns:catel="http://schemas.catelproject.com"
               xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
               xmlns:local="clr-namespace:Orc.Memento.Example"
-              xmlns:dd="urn:gong-wpf-dragdrop"
+              xmlns:dd="urn:gong-wpf-dragdrop" 
+              xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
               mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
 
     <Window.Resources>
@@ -20,70 +21,78 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto" MinWidth="300" />
-        </Grid.ColumnDefinitions>
-
+    <orccontrols:StackGrid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="Undo" Command="{Binding Undo}" Margin="20,10,5,5" Width="50"/>
-            <Button Content="Redo" Command="{Binding Redo}" Margin="10,10,5,5" Width="50"/>
-        </StackPanel>
+        <orctheming:ThemeSwitcherView />
 
-        <Border BorderBrush="Blue" BorderThickness="1" Grid.Row="1" Margin="0,20,5,5">
-            <StackPanel Orientation="Horizontal" Height="30">
-                <TextBlock Text="First name: " VerticalAlignment="Center"/>
-                <TextBox Text="{Binding Model.Name, UpdateSourceTrigger=PropertyChanged}" 
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto" MinWidth="300" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Button Content="Undo" Command="{Binding Undo}" Margin="20,10,5,5" Width="50"/>
+                <Button Content="Redo" Command="{Binding Redo}" Margin="10,10,5,5" Width="50"/>
+            </StackPanel>
+
+            <Border BorderBrush="Blue" BorderThickness="1" Grid.Row="1" Margin="0,20,5,5">
+                <StackPanel Orientation="Horizontal" Height="30">
+                    <TextBlock Text="First name: " VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Model.Name, UpdateSourceTrigger=PropertyChanged}" 
                              VerticalAlignment="Center" 
                              Width="400"
                              Margin="10,0,0,0"/>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <Border BorderBrush="Pink" BorderThickness="1" Grid.Row="2" Margin="0,10,5,5">
-            <StackPanel Orientation="Horizontal" Height="30">
-                <TextBlock Text="Last name: " VerticalAlignment="Center"/>
-                <TextBox Text="{Binding Model.LastName, UpdateSourceTrigger=PropertyChanged}" 
+            <Border BorderBrush="Pink" BorderThickness="1" Grid.Row="2" Margin="0,10,5,5">
+                <StackPanel Orientation="Horizontal" Height="30">
+                    <TextBlock Text="Last name: " VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Model.LastName, UpdateSourceTrigger=PropertyChanged}" 
                          VerticalAlignment="Center" 
                          Width="400"/>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <Border BorderBrush="Bisque" BorderThickness="1" Grid.Row="3" Margin="0,10,5,5">
-            <StackPanel Orientation="Horizontal">
-                <ListBox ItemsSource="{Binding Model.Data}" Width="300" />
-                <Button Content="Add random string to combo box" 
+            <Border BorderBrush="Bisque" BorderThickness="1" Grid.Row="3" Margin="0,10,5,5">
+                <StackPanel Orientation="Horizontal">
+                    <ListBox ItemsSource="{Binding Model.Data}" Width="300" />
+                    <Button Content="Add random string to combo box" 
                         Command="{Binding AddData}" 
                         VerticalAlignment="Top"
                         Width="250" 
                         Height="30" 
                         Margin="30,0,30,0"/>
-                <Button Content="Save" 
+                    <Button Content="Save" 
                         Command="{Binding Save}"
                         Width="150"
                         Height="30"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Margin="0,0,10,5"/>
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <Border BorderBrush="Red" BorderThickness="1" Grid.Row="4">
-            <Grid HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TreeView ItemsSource="{Binding Model.DataCollection, UpdateSourceTrigger=PropertyChanged}" 
+            <Border BorderBrush="Red" BorderThickness="1" Grid.Row="4">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TreeView ItemsSource="{Binding Model.DataCollection, UpdateSourceTrigger=PropertyChanged}" 
                           dd:DragDrop.IsDragSource="True"
                           dd:DragDrop.IsDropTarget="True"
                           dd:DragDrop.UseDefaultEffectDataTemplate="True"
@@ -95,21 +104,22 @@
                           HorizontalAlignment="Left" 
                           Width="400" 
                           MinHeight="100"/>
-                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left">
-                    <Button Content="Add new data" Command="{Binding AddSpecialData}" CommandParameter="{ Binding ElementName=MyTreeView, Path=SelectedItem }"
+                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left">
+                        <Button Content="Add new data" Command="{Binding AddSpecialData}" CommandParameter="{ Binding ElementName=MyTreeView, Path=SelectedItem }"
                             Height="30" 
                             Width="150"/>
-                    <Button Content="Add root data" Command="{Binding AddSpecialDataToRoot}"
+                        <Button Content="Add root data" Command="{Binding AddSpecialDataToRoot}"
                             Height="30" 
                             Width="150"/>
-                </StackPanel>
-            </Grid>
-        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
-        <Border BorderBrush="Aqua" BorderThickness=".5" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4">
-            <ListBox ItemsSource="{Binding UndoRedoEvents, Mode=OneWay}" />
-        </Border>
-    </Grid>
-
+            <Border BorderBrush="Aqua" BorderThickness=".5" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4">
+                <ListBox ItemsSource="{Binding UndoRedoEvents, Mode=OneWay}" />
+            </Border>
+        </Grid>
+    </orccontrols:StackGrid>
+    
 </catel:Window>
 

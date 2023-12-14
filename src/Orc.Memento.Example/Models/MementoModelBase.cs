@@ -1,123 +1,120 @@
-﻿namespace Orc.Memento.Example
+﻿namespace Orc.Memento.Example;
+
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using Catel.Data;
+
+public class MementoModelBase : ModelBase, IDisposable
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-    using System.Text;
-    using Catel.Data;
+    private const string COLLECTION_INDICATOR = "_Collection";
+    private const string OBJECT_INDICATOR = "_Object";
 
-    public class MementoModelBase : ModelBase, IDisposable
+    private readonly Dictionary<string, object> _mementoHashtable = new Dictionary<string, object>();
+    protected readonly IMementoService _mementoService;
+
+    public MementoModelBase(IMementoService mementoService)
     {
-        private const string COLLECTION_INDICATOR = "_Collection";
-        private const string OBJECT_INDICATOR = "_Object";
+        _mementoService = mementoService;
 
-        private readonly Dictionary<string, object> _mementoHashtable = new Dictionary<string, object>();
-        protected readonly IMementoService _mementoService;
+        RegisterCallerForStateTracking(null);
+    }
 
-        public MementoModelBase(IMementoService mementoService)
+    protected virtual void UnLoad()
+    {
+        foreach (var kvp in _mementoHashtable)
         {
-            _mementoService = mementoService;
-
-            RegisterCallerForStateTracking(null);
+            if (kvp.Key.Contains(COLLECTION_INDICATOR))
+            {
+                _mementoService.UnregisterCollection((INotifyCollectionChanged)kvp.Value);
+            }
+            else if (kvp.Key.Contains(OBJECT_INDICATOR))
+            {
+                _mementoService.UnregisterObject((INotifyPropertyChanged)kvp.Value);
+            }
         }
 
-        protected virtual void UnLoad()
-        {
-            foreach (var kvp in _mementoHashtable)
-            {
-                if (kvp.Key.Contains(COLLECTION_INDICATOR))
-                {
-                    _mementoService.UnregisterCollection((INotifyCollectionChanged)kvp.Value);
-                }
-                else
-                {
-                    _mementoService.UnregisterObject((INotifyPropertyChanged)kvp.Value);
-                }
-            }
+        _mementoHashtable.Clear();
+    }
 
-            _mementoHashtable.Clear();
+    protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        base.RaisePropertyChanged(sender, e);
+
+        RegisterCallerForStateTracking(e.PropertyName);
+    }
+
+    private void RegisterCallerForStateTracking(string caller)
+    {
+        var instanceType = TypeDescriptor.GetReflectionType(this);
+        var propertyInfo = caller is not null ? instanceType.GetProperty(caller) : null;
+
+        var dateTime = DateTime.Now;
+        var infoString = $"{propertyInfo?.ReflectedType.Name}.{propertyInfo?.Name}";
+        var key = $"{dateTime.ToLongTimeString()}.{dateTime.Millisecond} {(infoString.Length > 1 ? infoString : $"{dateTime.ToLongTimeString()}.{dateTime.Millisecond} {GetType().ToString()}")}";
+
+        if (propertyInfo is null)
+        {
+            // in case of Collection.Add the constructor of added class should fire NotifyPropertyChanged 
+            _mementoService.RegisterObject(this);
+            _mementoHashtable.Add(key, this);
+            return;
         }
 
-        protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
+        var propertyValueType = propertyInfo.GetValue(this);
+        if (propertyValueType is INotifyCollectionChanged notifyCollectionChanged)
         {
-            base.RaisePropertyChanged(sender, e);
-
-            RegisterCallerForStateTracking(e.PropertyName);
+            // double registration will be checked by MementoService it self
+            _mementoService.RegisterCollection(notifyCollectionChanged);
+            key += COLLECTION_INDICATOR;
+        }
+        else if (propertyValueType is INotifyPropertyChanged notifyPropertyChanged)
+        {
+            // double registration will be checked by MementoService it self
+            _mementoService.RegisterObject(notifyPropertyChanged);
+            key += OBJECT_INDICATOR;
         }
 
-        private void RegisterCallerForStateTracking(string caller)
+        _mementoHashtable.Add(key, propertyValueType);
+    }
+
+    #region IDisposable Support
+    private bool _disposedValue = false; // To detect redundant calls
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
         {
-            var instanceType = TypeDescriptor.GetReflectionType(this);
-            var propertyInfo = caller is not null ? instanceType.GetProperty(caller) : null;
-
-            var dateTime = DateTime.Now;
-            var infoString = $"{propertyInfo?.ReflectedType.Name}.{propertyInfo?.Name}";
-            var key = $"{dateTime.ToLongTimeString()}.{dateTime.Millisecond} {(infoString.Length > 1 ? infoString : $"{dateTime.ToLongTimeString()}.{dateTime.Millisecond} {GetType().ToString()}")}";
-
-            if (propertyInfo is null)
+            if (disposing)
             {
-                // in case of Collection.Add the constructor of added class should fire NotifyPropertyChanged 
-                _mementoService.RegisterObject(this);
-                _mementoHashtable.Add(key, this);
-                return;
+                // TODO: dispose managed state (managed objects).
+                UnLoad();
             }
-
-            var propertyValueType = propertyInfo.GetValue(this);
-            if (propertyValueType is INotifyCollectionChanged notifyCollectionChanged)
-            {
-                // double registration will be checked by MementoService it self
-                _mementoService.RegisterCollection(notifyCollectionChanged);
-                key += COLLECTION_INDICATOR;
-            }
-            else if (propertyValueType is INotifyPropertyChanged notifyPropertyChanged)
-            {
-                // double registration will be checked by MementoService it self
-                _mementoService.RegisterObject(notifyPropertyChanged);
-                key += OBJECT_INDICATOR;
-            }
-
-            _mementoHashtable.Add(key, propertyValueType);
-        }
-
-        #region IDisposable Support
-        private bool _disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    UnLoad();
-                }
                 
 
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
+            // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+            // TODO: set large fields to null.
 
-                _disposedValue = true;
-            }
+            _disposedValue = true;
         }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~ModelBase() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-#pragma warning disable IDISP019 // Call SuppressFinalize
-        public void Dispose()
-#pragma warning restore IDISP019 // Call SuppressFinalize
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            //GC.SuppressFinalize(this);
-        }
-        #endregion
     }
+
+    // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+    // ~ModelBase() {
+    //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+    //   Dispose(false);
+    // }
+
+    // This code added to correctly implement the disposable pattern.
+#pragma warning disable IDISP019 // Call SuppressFinalize
+    public void Dispose()
+#pragma warning restore IDISP019 // Call SuppressFinalize
+    {
+        // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        Dispose(true);
+        // TODO: uncomment the following line if the finalizer is overridden above.
+        //GC.SuppressFinalize(this);
+    }
+    #endregion
 }

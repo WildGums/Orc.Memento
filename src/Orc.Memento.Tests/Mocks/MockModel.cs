@@ -1,42 +1,34 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MockModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.Memento.Tests.Mocks;
 
+using Catel.Data;
 
-namespace Orc.Memento.Tests.Mocks
+public class MockModel : ObservableObject
 {
-    using Catel.Data;
+    #region Fields
+    private string _value;
+    #endregion
 
-    public class MockModel : ObservableObject
+    #region Properties
+    public static string Name { get; private set; }
+
+    public string Value
     {
-        #region Fields
-        private string _value;
-        #endregion
-
-        #region Properties
-        public static string Name { get; private set; }
-
-        public string Value
+        get { return _value; }
+        set
         {
-            get { return _value; }
-            set
+            if (!string.Equals(_value, value))
             {
-                if (!string.Equals(_value, value))
-                {
-                    _value = value;
-                    RaisePropertyChanged(nameof(Value));
-                }
+                _value = value;
+                RaisePropertyChanged(nameof(Value));
             }
         }
-        #endregion
-
-        #region Methods
-        public static void Change(string value)
-        {
-            Name = value;
-        }
-        #endregion
     }
+    #endregion
+
+    #region Methods
+    public static void Change(string value)
+    {
+        Name = value;
+    }
+    #endregion
 }

@@ -1,116 +1,107 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ActionUndoFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.Memento.Tests;
 
+using System;
+using Mocks;
+using NUnit.Framework;
 
-namespace Orc.Memento.Tests
+public class ActionUndoFacts
 {
-    using System;
-    using Catel.Tests;
-    using Mocks;
-    using NUnit.Framework;
-
-    public class ActionUndoFacts
+    #region Nested type: TheActionsThroughMementoServiceMethod
+    [TestFixture]
+    public class TheActionsThroughMementoServiceMethod
     {
-        #region Nested type: TheActionsThroughMementoServiceMethod
-        [TestFixture]
-        public class TheActionsThroughMementoServiceMethod
+        [TestCase]
+        public void CallActions()
         {
-            [TestCase]
-            public void CallActions()
-            {
-                var value = false;
-                var mementoService = new MementoService();
-                var action = new ActionUndo(this, () => value = true, () => value = false);
+            var value = false;
+            var mementoService = new MementoService();
+            var action = new ActionUndo(this, () => value = true, () => value = false);
 
-                mementoService.Add(action);
-                Assert.IsFalse(value);
+            mementoService.Add(action);
+            Assert.That(value, Is.False);
 
-                mementoService.Undo();
-                Assert.IsTrue(value);
+            mementoService.Undo();
+            Assert.That(value, Is.True);
 
-                mementoService.Redo();
-                Assert.IsFalse(value);
-            }
-
-            [TestCase]
-            public void SetProperty()
-            {
-                var instance = new MockCatelModel();
-                var action = new PropertyChangeUndo(instance, "Value", "previousValue", "nextValue");
-                var mementoService = new MementoService();
-
-                mementoService.Add(action);
-                Assert.AreEqual(MockCatelModel.ValueProperty.GetDefaultValue(), instance.Value);
-
-                mementoService.Undo();
-                Assert.AreEqual("previousValue", instance.Value);
-
-                mementoService.Redo();
-                Assert.AreEqual("nextValue", instance.Value);
-            }
+            mementoService.Redo();
+            Assert.That(value, Is.False);
         }
-        #endregion
 
-        #region Nested type: TheConstructor
-        [TestFixture]
-        public class TheConstructor
+        [TestCase]
+        public void SetProperty()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullInstance()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ActionUndo(null, () => MockModel.Change("test")));
-            }
+            var instance = new MockCatelModel();
+            var action = new PropertyChangeUndo(instance, "Value", "previousValue", "nextValue");
+            var mementoService = new MementoService();
 
-            [TestCase]
-            public void ThrowsArgumentExceptionForNullUndoMethod()
-            {
-                var obj = new object();
+            mementoService.Add(action);
+            Assert.That(instance.Value, Is.EqualTo(MockCatelModel.ValueProperty.GetDefaultValue()));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new ActionUndo(obj, null));
-            }
+            mementoService.Undo();
+            Assert.That(instance.Value, Is.EqualTo("previousValue"));
+
+            mementoService.Redo();
+            Assert.That(instance.Value, Is.EqualTo("nextValue"));
         }
-        #endregion
-
-        #region Nested type: TheUndoMethod
-        [TestFixture]
-        public class TheUndoMethod
-        {
-            [TestCase]
-            public void SetsOldValue()
-            {
-                var action = new ActionUndo(this, () => MockModel.Change("previousValue"));
-
-                action.Undo();
-                Assert.AreEqual("previousValue", MockModel.Name);
-            }
-
-            [TestCase]
-            public void SetsNewValue()
-            {
-                var action = new ActionUndo(this, () => MockModel.Change("previousValue"), () => MockModel.Change("nextValue"));
-
-                action.Redo();
-                Assert.AreEqual("nextValue", MockModel.Name);
-            }
-
-            [TestCase]
-            public void SetsOldAndNewValue()
-            {
-                var action = new ActionUndo(this, () => MockModel.Change("previousValue"), () => MockModel.Change("nextValue"));
-
-                action.Undo();
-                Assert.AreEqual("previousValue", MockModel.Name);
-
-                action.Redo();
-                Assert.AreEqual("nextValue", MockModel.Name);
-
-                action.Undo();
-                Assert.AreEqual("previousValue", MockModel.Name);
-            }
-        }
-        #endregion
     }
+    #endregion
+
+    #region Nested type: TheConstructor
+    [TestFixture]
+    public class TheConstructor
+    {
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullInstance()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ActionUndo(null, () => MockModel.Change("test")));
+        }
+
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullUndoMethod()
+        {
+            var obj = new object();
+
+            Assert.Throws<ArgumentNullException>(() => new ActionUndo(obj, null));
+        }
+    }
+    #endregion
+
+    #region Nested type: TheUndoMethod
+    [TestFixture]
+    public class TheUndoMethod
+    {
+        [TestCase]
+        public void SetsOldValue()
+        {
+            var action = new ActionUndo(this, () => MockModel.Change("previousValue"));
+
+            action.Undo();
+            Assert.That(MockModel.Name, Is.EqualTo("previousValue"));
+        }
+
+        [TestCase]
+        public void SetsNewValue()
+        {
+            var action = new ActionUndo(this, () => MockModel.Change("previousValue"), () => MockModel.Change("nextValue"));
+
+            action.Redo();
+            Assert.That(MockModel.Name, Is.EqualTo("nextValue"));
+        }
+
+        [TestCase]
+        public void SetsOldAndNewValue()
+        {
+            var action = new ActionUndo(this, () => MockModel.Change("previousValue"), () => MockModel.Change("nextValue"));
+
+            action.Undo();
+            Assert.That(MockModel.Name, Is.EqualTo("previousValue"));
+
+            action.Redo();
+            Assert.That(MockModel.Name, Is.EqualTo("nextValue"));
+
+            action.Undo();
+            Assert.That(MockModel.Name, Is.EqualTo("previousValue"));
+        }
+    }
+    #endregion
 }

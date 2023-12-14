@@ -1,86 +1,71 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyChangeUndoFacts.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.Memento.Tests;
 
+using System;
+using Mocks;
+using NUnit.Framework;
 
-namespace Orc.Memento.Tests
+public class PropertyChangeUndoFacts
 {
-    using System;
-    using Catel.Tests;
-    using Mocks;
-    using NUnit.Framework;
-
-    public class PropertyChangeUndoFacts
+    [TestFixture]
+    public class TheConstructor
     {
-        #region Nested type: TheConstructor
-        [TestFixture]
-        public class TheConstructor
+        [TestCase]
+        public void ThrowsArgumentNullExceptionForNullInstance()
         {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullInstance()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new PropertyChangeUndo(null, "PropertyName", null));
-            }
-
-            [TestCase]
-            public void ThrowsArgumentExceptionForNullPropertyName()
-            {
-                var obj = new object();
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new PropertyChangeUndo(obj, null, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new PropertyChangeUndo(obj, string.Empty, null));
-            }
-
-            [TestCase]
-            public void SetsValuesCorrectly()
-            {
-                var obj = new {MyProperty = "currentValue"};
-
-                var propertyChangeUndo = new PropertyChangeUndo(obj, "MyProperty", "currentValue", "nextValue");
-                Assert.AreEqual("currentValue", obj.MyProperty);
-                Assert.AreEqual("MyProperty", propertyChangeUndo.PropertyName);
-                Assert.AreEqual(obj, propertyChangeUndo.Target);
-                Assert.AreEqual("currentValue", propertyChangeUndo.OldValue);
-                Assert.AreEqual("nextValue", propertyChangeUndo.NewValue);
-                Assert.AreEqual(true, propertyChangeUndo.CanRedo);
-            }
+            Assert.Throws<ArgumentNullException>(() => new PropertyChangeUndo(null, "PropertyName", null));
         }
-        #endregion
 
-        #region Nested type: TheRedoMethod
-        [TestFixture]
-        public class TheRedoMethod
+        [TestCase]
+        public void ThrowsArgumentExceptionForNullPropertyName()
         {
-            [TestCase]
-            public void SetsNewValue()
-            {
-                var obj = new MockModel {Value = "currentValue"};
+            var obj = new object();
 
-                var propertyChangeUndo = new PropertyChangeUndo(obj, "Value", "previousValue", "nextValue");
-                propertyChangeUndo.Redo();
-
-                Assert.AreEqual("nextValue", obj.Value);
-            }
+            Assert.Throws<ArgumentException>(() => new PropertyChangeUndo(obj, null, null));
+            Assert.Throws<ArgumentException>(() => new PropertyChangeUndo(obj, string.Empty, null));
         }
-        #endregion
 
-        #region Nested type: TheUndoMethod
-        [TestFixture]
-        public class TheUndoMethod
+        [TestCase]
+        public void SetsValuesCorrectly()
         {
-            [TestCase]
-            public void SetsOldValue()
-            {
-                var obj = new MockModel {Value = "currentValue"};
+            var obj = new {MyProperty = "currentValue"};
 
-                var propertyChangeUndo = new PropertyChangeUndo(obj, "Value", "previousValue", "nextValue");
-                propertyChangeUndo.Undo();
-
-                Assert.AreEqual("previousValue", obj.Value);
-            }
+            var propertyChangeUndo = new PropertyChangeUndo(obj, "MyProperty", "currentValue", "nextValue");
+            Assert.That(obj.MyProperty, Is.EqualTo("currentValue"));
+            Assert.That(propertyChangeUndo.PropertyName, Is.EqualTo("MyProperty"));
+            Assert.That(propertyChangeUndo.Target, Is.EqualTo(obj));
+            Assert.That(propertyChangeUndo.OldValue, Is.EqualTo("currentValue"));
+            Assert.That(propertyChangeUndo.NewValue, Is.EqualTo("nextValue"));
+            Assert.That(propertyChangeUndo.CanRedo, Is.EqualTo(true));
         }
-        #endregion
+    }
+
+    [TestFixture]
+    public class TheRedoMethod
+    {
+        [TestCase]
+        public void SetsNewValue()
+        {
+            var obj = new MockModel {Value = "currentValue"};
+
+            var propertyChangeUndo = new PropertyChangeUndo(obj, "Value", "previousValue", "nextValue");
+            propertyChangeUndo.Redo();
+
+            Assert.That(obj.Value, Is.EqualTo("nextValue"));
+        }
+    }
+
+    [TestFixture]
+    public class TheUndoMethod
+    {
+        [TestCase]
+        public void SetsOldValue()
+        {
+            var obj = new MockModel {Value = "currentValue"};
+
+            var propertyChangeUndo = new PropertyChangeUndo(obj, "Value", "previousValue", "nextValue");
+            propertyChangeUndo.Undo();
+
+            Assert.That(obj.Value, Is.EqualTo("previousValue"));
+        }
     }
 }

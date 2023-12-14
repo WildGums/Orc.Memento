@@ -1,118 +1,116 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionObserver.cs" company="WildGums">
-//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.Memento;
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using Catel;
+using Catel.Logging;
 
-namespace Orc.Memento
+/// <summary>
+/// This class provides a simple <see cref="INotifyCollectionChanged"/> observer that will add undo/redo support to a 
+/// collection class automatically by monitoring the collection changed events.
+/// </summary>
+public class CollectionObserver : ObserverBase
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using Catel;
-    using Catel.Logging;
+    /// <summary>
+    /// The log.
+    /// </summary>
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
     /// <summary>
-    /// This class provides a simple <see cref="INotifyCollectionChanged"/> observer that will add undo/redo support to a 
-    /// collection class automatically by monitoring the collection changed events.
+    /// The collection.
     /// </summary>
-    public class CollectionObserver : ObserverBase
+    private INotifyCollectionChanged? _collection;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CollectionObserver"/> class.
+    /// </summary>
+    /// <param name="collection">The collection.</param>
+    /// <param name="tag">The tag.</param>
+    /// <param name="mementoService">The memento service.</param>
+    /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+    public CollectionObserver(INotifyCollectionChanged collection, object? tag = null, IMementoService? mementoService = null)
+        : base(tag, mementoService)
     {
-        #region Constants
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
+        ArgumentNullException.ThrowIfNull(collection);
 
-        #region Fields
-        /// <summary>
-        /// The collection.
-        /// </summary>
-        private INotifyCollectionChanged _collection;
-        #endregion
+        _collection = collection;
+        _collection.CollectionChanged += OnCollectionChanged;
+    }
 
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CollectionObserver"/> class.
-        /// </summary>
-        /// <param name="collection">The collection.</param>
-        /// <param name="tag">The tag.</param>
-        /// <param name="mementoService">The memento service.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
-        public CollectionObserver(INotifyCollectionChanged collection, object tag = null, IMementoService mementoService = null)
-            : base(tag, mementoService)
+    /// <summary>
+    /// This is invoked when the collection changes.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// This method must be public because the <see cref="IWeakEventListener"/> is used.
+    /// </remarks>
+    public void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (sender is not IList collection)
         {
-            Argument.IsNotNull("collection", collection);
-
-            _collection = collection;
-            _collection.CollectionChanged += OnCollectionChanged;
+            return;
         }
-        #endregion
 
-        #region Methods
-        /// <summary>
-        /// This is invoked when the collection changes.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// This method must be public because the <see cref="IWeakEventListener"/> is used.
-        /// </remarks>
-        public void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        Log.Debug("Automatically tracking change '{0}' of collection", e.Action);
+
+        var undoList = new List<CollectionChangeUndo>();
+
+        switch (e.Action)
         {
-            Log.Debug("Automatically tracking change '{0}' of collection", e.Action);
-
-            var undoList = new List<CollectionChangeUndo>();
-            var collection = (IList) sender;
-
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
+            case NotifyCollectionChangedAction.Add:
+                if (e.NewItems is not null)
+                {
                     undoList.AddRange(e.NewItems.Cast<object>().Select((item, i) => new CollectionChangeUndo(collection, CollectionChangeType.Add, -1, e.NewStartingIndex + i, null, item, Tag)));
-                    break;
+                }
+                break;
 
-                case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems is not null)
+                {
                     undoList.AddRange(e.OldItems.Cast<object>().Select((item, i) => new CollectionChangeUndo(collection, CollectionChangeType.Remove, e.OldStartingIndex + i, -1, item, null, Tag)));
-                    break;
+                }
+                break;
 
-                case NotifyCollectionChangedAction.Replace:
+            case NotifyCollectionChangedAction.Replace:
+                if (e.NewItems is not null && e.OldItems is not null)
+                {
                     undoList.Add(new CollectionChangeUndo(collection, CollectionChangeType.Replace, e.OldStartingIndex, e.NewStartingIndex, e.OldItems[0], e.NewItems[0], Tag));
-                    break;
+                }
+                break;
 
-#if NET
-                case NotifyCollectionChangedAction.Move:
+            case NotifyCollectionChangedAction.Move:
+                if (e.NewItems is not null)
+                {
                     undoList.Add(new CollectionChangeUndo(collection, CollectionChangeType.Move, e.OldStartingIndex, e.NewStartingIndex, e.NewItems[0], e.NewItems[0], Tag));
-                    break;
-#endif
-            }
-
-            foreach (var operation in undoList)
-            {
-                MementoService.Add(operation);
-            }
-
-            Log.Debug("Automatically tracked change '{0}' of collection", e.Action);
+                }
+                break;
         }
 
-        /// <summary>
-        /// Clears all the values and unsubscribes any existing change notifications.
-        /// </summary>
-        public override void CancelSubscription()
+        foreach (var operation in undoList)
         {
-            Log.Debug("Canceling collection change subscription");
-
-            if (_collection is not null)
-            {
-                _collection.CollectionChanged -= OnCollectionChanged;
-                _collection = null;
-            }
-
-            Log.Debug("Canceled collection change subscription");
+            MementoService.Add(operation);
         }
-        #endregion
+
+        Log.Debug("Automatically tracked change '{0}' of collection", e.Action);
+    }
+
+    /// <summary>
+    /// Clears all the values and unsubscribes any existing change notifications.
+    /// </summary>
+    public override void CancelSubscription()
+    {
+        Log.Debug("Canceling collection change subscription");
+
+        if (_collection is not null)
+        {
+            _collection.CollectionChanged -= OnCollectionChanged;
+            _collection = null;
+        }
+
+        Log.Debug("Canceled collection change subscription");
     }
 }
