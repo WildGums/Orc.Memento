@@ -174,7 +174,7 @@ namespace Orc.Memento
     public abstract class UndoBase : Orc.Memento.IMementoSupport
     {
         protected UndoBase(object target, object? tag) { }
-        public bool CanRedo { get; set; }
+        public bool CanRedo { get; protected set; }
         public string Description { get; set; }
         public object? Tag { get; set; }
         public object Target { get; }
