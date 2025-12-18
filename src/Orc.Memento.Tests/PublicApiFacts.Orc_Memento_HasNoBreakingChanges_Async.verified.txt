@@ -1,7 +1,8 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v8.0", FrameworkDisplayName=".NET 8.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
 public static class ModuleInitializer
 {
+    [System.Runtime.CompilerServices.ModuleInitializer]
     public static void Initialize() { }
 }
 namespace Orc.Memento
@@ -174,7 +175,7 @@ namespace Orc.Memento
     public abstract class UndoBase : Orc.Memento.IMementoSupport
     {
         protected UndoBase(object target, object? tag) { }
-        public bool CanRedo { get; set; }
+        public bool CanRedo { get; protected set; }
         public string Description { get; set; }
         public object? Tag { get; set; }
         public object Target { get; }
