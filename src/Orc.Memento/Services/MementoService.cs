@@ -8,6 +8,7 @@ using System.Linq;
 using Catel;
 using Catel.Collections;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The memento service allows the usage of the memento pattern. This means that this service provides possibilities
@@ -15,10 +16,7 @@ using Catel.Logging;
 /// </summary>
 public class MementoService : IMementoService
 {
-    /// <summary>
-    /// The log.
-    /// </summary>
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(MementoService));
 
     /// <summary>
     /// The default maximum supported actions.
@@ -54,7 +52,7 @@ public class MementoService : IMementoService
         MaximumSupportedBatches = maximumSupportedBatches;
         IsEnabled = true;
 
-        Log.Debug("Initialized MementoService with {0} supported batches", maximumSupportedBatches);
+        Logger.LogDebug("Initialized MementoService with {0} supported batches", maximumSupportedBatches);
     }
 
     /// <summary>
@@ -184,7 +182,7 @@ public class MementoService : IMementoService
             Description = description
         };
 
-        Log.Debug("Starting batch with title '{0}' and description '{1}'", ObjectToStringHelper.ToString(batch.Title),
+        Logger.LogDebug("Starting batch with title '{0}' and description '{1}'", ObjectToStringHelper.ToString(batch.Title),
             ObjectToStringHelper.ToString(batch.Description));
 
         _currentBatch = batch;
@@ -211,7 +209,7 @@ public class MementoService : IMementoService
 
         _currentBatch = null;
 
-        Log.Debug("Ended batch with title '{0}' and description '{1}' with '{2}' actions", ObjectToStringHelper.ToString(batch.Title),
+        Logger.LogDebug("Ended batch with title '{0}' and description '{1}' with '{2}' actions", ObjectToStringHelper.ToString(batch.Title),
             ObjectToStringHelper.ToString(batch.Description), batch.ActionCount);
 
         return batch;
@@ -225,11 +223,11 @@ public class MementoService : IMementoService
     {
         if (!CanUndo)
         {
-            Log.Info("Cannot undo action");
+            Logger.LogInformation("Cannot undo action");
             return false;
         }
 
-        Log.Debug("Undoing action");
+        Logger.LogDebug("Undoing action");
 
         IMementoBatch? undo = null;
 
@@ -244,7 +242,7 @@ public class MementoService : IMementoService
 
         if (undo is null)
         {
-            Log.Info("Cannot undo because there is no undo batch for this action");
+            Logger.LogInformation("Cannot undo because there is no undo batch for this action");
             return false;
         }
 
@@ -268,7 +266,7 @@ public class MementoService : IMementoService
 
             Updated?.Invoke(this, new MementoEventArgs(MementoAction.Undo, undo));
 
-            Log.Debug("Action is successfully undone");
+            Logger.LogDebug("Action is successfully undone");
             return true;
         }
         finally
@@ -288,11 +286,11 @@ public class MementoService : IMementoService
     {
         if (!CanRedo)
         {
-            Log.Info("Cannot redo action");
+            Logger.LogInformation("Cannot redo action");
             return false;
         }
 
-        Log.Debug("Redoing action");
+        Logger.LogDebug("Redoing action");
 
         IMementoBatch? undo = null;
 
@@ -307,7 +305,7 @@ public class MementoService : IMementoService
 
         if (undo is null || !undo.CanRedo)
         {
-            Log.Info("Cannot redo because there is no redo batch for this action");
+            Logger.LogInformation("Cannot redo because there is no redo batch for this action");
             return false;
         }
 
@@ -328,7 +326,7 @@ public class MementoService : IMementoService
 
             Updated?.Invoke(this, new MementoEventArgs(MementoAction.Redo, undo));
 
-            Log.Debug("Action is successfully redone");
+            Logger.LogDebug("Action is successfully redone");
             return true;
         }
         finally
@@ -426,17 +424,17 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(instance);
 
-        Log.Debug("Registering object of type '{0}' with tag '{1}'", instance.GetType().Name, TagHelper.ToString(tag));
+        Logger.LogDebug("Registering object of type '{0}' with tag '{1}'", instance.GetType().Name, TagHelper.ToString(tag));
 
         if (!_observers.ContainsKey(instance))
         {
-            _observers[instance] = new ObjectObserver(instance, tag, this);
+            _observers[instance] = new ObjectObserver(instance, this, tag);
 
-            Log.Debug("Registered object");
+            Logger.LogDebug("Registered object");
         }
         else
         {
-            Log.Debug("Object already registered, not registered");
+            Logger.LogDebug("Object already registered, not registered");
         }
     }
 
@@ -449,7 +447,7 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(instance);
 
-        Log.Debug("Unregistering object of type '{0}'", instance.GetType().Name);
+        Logger.LogDebug("Unregistering object of type '{0}'", instance.GetType().Name);
 
         ClearActionsForObject(instance);
 
@@ -458,11 +456,11 @@ public class MementoService : IMementoService
             _observers[instance].CancelSubscription();
             _observers.Remove(instance);
 
-            Log.Debug("Unregistered object");
+            Logger.LogDebug("Unregistered object");
         }
         else
         {
-            Log.Debug("Object was not registered, not unregistered");
+            Logger.LogDebug("Object was not registered, not unregistered");
         }
     }
 
@@ -477,17 +475,17 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(collection);
 
-        Log.Debug("Registering collection of type '{0}' with tag '{1}'", collection.GetType().Name, TagHelper.ToString(tag));
+        Logger.LogDebug("Registering collection of type '{0}' with tag '{1}'", collection.GetType().Name, TagHelper.ToString(tag));
 
         if (!_observers.ContainsKey(collection))
         {
-            _observers[collection] = new CollectionObserver(collection, tag, this);
+            _observers[collection] = new CollectionObserver(collection, this, tag);
 
-            Log.Debug("Registered collection");
+            Logger.LogDebug("Registered collection");
         }
         else
         {
-            Log.Debug("Collection already registered, not registered");
+            Logger.LogDebug("Collection already registered, not registered");
         }
     }
 
@@ -500,7 +498,7 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(collection);
 
-        Log.Debug("Unregistering collection of type '{0}'", collection.GetType().Name);
+        Logger.LogDebug("Unregistering collection of type '{0}'", collection.GetType().Name);
 
         ClearActionsForObject(collection);
 
@@ -509,11 +507,11 @@ public class MementoService : IMementoService
             _observers[collection].CancelSubscription();
             _observers.Remove(collection);
 
-            Log.Debug("Unregistered collection");
+            Logger.LogDebug("Unregistered collection");
         }
         else
         {
-            Log.Debug("Collection was not registered, not unregistered");
+            Logger.LogDebug("Collection was not registered, not unregistered");
         }
     }
 
@@ -526,7 +524,7 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(obj);
 
-        Log.Debug("Clearing actions for object of type '{0}'", obj.GetType().Name);
+        Logger.LogDebug("Clearing actions for object of type '{0}'", obj.GetType().Name);
 
         lock (_lock)
         {
@@ -534,7 +532,7 @@ public class MementoService : IMementoService
             ClearActionsForObjectList(_redoBatches, obj);
         }
 
-        Log.Debug("Cleared actions for object of type '{0}'", obj.GetType().Name);
+        Logger.LogDebug("Cleared actions for object of type '{0}'", obj.GetType().Name);
     }
 
     /// <summary>
@@ -582,7 +580,7 @@ public class MementoService : IMementoService
             return;
         }
 
-        Log.Debug("Clearing all actions");
+        Logger.LogDebug("Clearing all actions");
 
         lock (_lock)
         {
@@ -594,6 +592,6 @@ public class MementoService : IMementoService
 
         Updated?.Invoke(this, new MementoEventArgs(MementoAction.ClearData));
 
-        Log.Debug("Cleared all actions");
+        Logger.LogDebug("Cleared all actions");
     }
 }

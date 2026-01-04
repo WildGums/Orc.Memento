@@ -50,7 +50,7 @@ namespace Orc.Memento
     }
     public class CollectionObserver : Orc.Memento.ObserverBase
     {
-        public CollectionObserver(System.Collections.Specialized.INotifyCollectionChanged collection, object? tag = null, Orc.Memento.IMementoService? mementoService = null) { }
+        public CollectionObserver(System.Collections.Specialized.INotifyCollectionChanged collection, Orc.Memento.IMementoService mementoService, object? tag) { }
         public override void CancelSubscription() { }
         public void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
     }
@@ -144,13 +144,13 @@ namespace Orc.Memento
     }
     public class ObjectObserver : Orc.Memento.ObserverBase
     {
-        public ObjectObserver(System.ComponentModel.INotifyPropertyChanged propertyChanged, object? tag = null, Orc.Memento.IMementoService? mementoService = null) { }
+        public ObjectObserver(System.ComponentModel.INotifyPropertyChanged propertyChanged, Orc.Memento.IMementoService mementoService, object? tag) { }
         public override void CancelSubscription() { }
         public void OnPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) { }
     }
     public abstract class ObserverBase
     {
-        protected ObserverBase(object? tag, Orc.Memento.IMementoService? mementoService = null) { }
+        protected ObserverBase(Orc.Memento.IMementoService mementoService, object? tag) { }
         protected Orc.Memento.IMementoService MementoService { get; }
         public object? Tag { get; set; }
         public abstract void CancelSubscription();
@@ -162,6 +162,10 @@ namespace Orc.Memento
         public void AddRange(System.Collections.Generic.IEnumerable<Orc.Memento.IMementoSupport> operations) { }
         protected override void RedoAction() { }
         protected override void UndoAction() { }
+    }
+    public static class OrcMementoModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcMemento(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
     public class PropertyChangeUndo : Orc.Memento.UndoBase
     {

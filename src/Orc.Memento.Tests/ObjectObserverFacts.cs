@@ -15,7 +15,7 @@ public class ObjectObserverFacts
             var obj = new Mocks.MockModel();
 
             var service = new MementoService();
-            var observer = new ObjectObserver(obj, mementoService: service);
+            var observer = new ObjectObserver(obj, service, null);
 
             Assert.That(service.UndoBatches.Count(), Is.EqualTo(0));
 
@@ -45,7 +45,7 @@ public class ObjectObserverFacts
             const string tag = "MyTag";
 
             var service = new MementoService();
-            var observer = new ObjectObserver(obj, tag, service);
+            var observer = new ObjectObserver(obj, service, tag);
 
             Assert.That(observer.Tag, Is.EqualTo(tag));
         }

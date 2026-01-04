@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Catel;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// This class provides a simple <see cref="INotifyCollectionChanged"/> observer that will add undo/redo support to a 
@@ -14,10 +15,7 @@ using Catel.Logging;
 /// </summary>
 public class CollectionObserver : ObserverBase
 {
-    /// <summary>
-    /// The log.
-    /// </summary>
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(CollectionObserver));
 
     /// <summary>
     /// The collection.
@@ -28,11 +26,11 @@ public class CollectionObserver : ObserverBase
     /// Initializes a new instance of the <see cref="CollectionObserver"/> class.
     /// </summary>
     /// <param name="collection">The collection.</param>
-    /// <param name="tag">The tag.</param>
     /// <param name="mementoService">The memento service.</param>
+    /// <param name="tag">The tag.</param>
     /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
-    public CollectionObserver(INotifyCollectionChanged collection, object? tag = null, IMementoService? mementoService = null)
-        : base(tag, mementoService)
+    public CollectionObserver(INotifyCollectionChanged collection, IMementoService mementoService, object? tag)
+        : base(mementoService, tag)
     {
         ArgumentNullException.ThrowIfNull(collection);
 
@@ -55,7 +53,7 @@ public class CollectionObserver : ObserverBase
             return;
         }
 
-        Log.Debug("Automatically tracking change '{0}' of collection", e.Action);
+        Logger.LogDebug("Automatically tracking change '{0}' of collection", e.Action);
 
         var undoList = new List<CollectionChangeUndo>();
 
@@ -95,7 +93,7 @@ public class CollectionObserver : ObserverBase
             MementoService.Add(operation);
         }
 
-        Log.Debug("Automatically tracked change '{0}' of collection", e.Action);
+        Logger.LogDebug("Automatically tracked change '{0}' of collection", e.Action);
     }
 
     /// <summary>
@@ -103,7 +101,7 @@ public class CollectionObserver : ObserverBase
     /// </summary>
     public override void CancelSubscription()
     {
-        Log.Debug("Canceling collection change subscription");
+        Logger.LogDebug("Canceling collection change subscription");
 
         if (_collection is not null)
         {
@@ -111,6 +109,6 @@ public class CollectionObserver : ObserverBase
             _collection = null;
         }
 
-        Log.Debug("Canceled collection change subscription");
+        Logger.LogDebug("Canceled collection change subscription");
     }
 }

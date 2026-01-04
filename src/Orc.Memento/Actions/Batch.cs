@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Catel;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Represents a batch of memento actions.
 /// </summary>
 public class Batch : IMementoBatch, IUniqueIdentifyable
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(Batch));
 
     private readonly List<IMementoSupport> _actions = new List<IMementoSupport>();
 
@@ -153,7 +154,7 @@ public class Batch : IMementoBatch, IUniqueIdentifyable
     {
         ArgumentNullException.ThrowIfNull(obj);
 
-        Log.Debug("Clearing actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
+        Logger.LogDebug("Clearing actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
 
         var temp = new List<IMementoSupport>(_actions.Where(operation => operation.Target == obj));
 
@@ -162,6 +163,6 @@ public class Batch : IMementoBatch, IUniqueIdentifyable
             _actions.Remove(operation);
         }
 
-        Log.Debug("Cleared actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
+        Logger.LogDebug("Cleared actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
     }
 }
