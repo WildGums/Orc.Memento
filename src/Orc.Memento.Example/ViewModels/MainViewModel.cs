@@ -10,8 +10,8 @@ public class MainViewModel : CustomDragDropEnabledViewModel, IDisposable
 {
     private bool _disposed;
 
-    public MainViewModel(IMementoService mementoService)
-        : base(mementoService)
+    public MainViewModel(IServiceProvider serviceProvider, IMementoService mementoService)
+        : base(serviceProvider, mementoService)
     {
         // disable state tracking of memento service while viewmodel will be initialized
         _mementoService.IsEnabled = false;
@@ -22,12 +22,12 @@ public class MainViewModel : CustomDragDropEnabledViewModel, IDisposable
         // reactivate state tracking of memento service
         _mementoService.IsEnabled = true;
 
-        Undo = new Command(OnUndoExecute, OnUndoCanExecute);
-        Redo = new Command(OnRedoExecute, OnRedoCanExecute);
-        Save = new Command(OnSaveExecute, OnSaveCanExecute);
-        AddData = new Command(OnAddDataExecute, OnAddDataCanExecute);
-        AddSpecialData = new Command<SpecialDataClass>(OnAddSpecialDataExecute, OnAddSpecialDataCanExecute);
-        AddSpecialDataToRoot = new Command(OnAddSpecialDataToRootExecute, OnAddSpecialDataToRootCanExecute);
+        Undo = new Command(serviceProvider, OnUndoExecute, OnUndoCanExecute);
+        Redo = new Command(serviceProvider, OnRedoExecute, OnRedoCanExecute);
+        Save = new Command(serviceProvider, OnSaveExecute, OnSaveCanExecute);
+        AddData = new Command(serviceProvider, OnAddDataExecute, OnAddDataCanExecute);
+        AddSpecialData = new Command<SpecialDataClass>(serviceProvider, OnAddSpecialDataExecute, OnAddSpecialDataCanExecute);
+        AddSpecialDataToRoot = new Command(serviceProvider, OnAddSpecialDataToRootExecute, OnAddSpecialDataToRootCanExecute);
     }
 
     public override string Title => "Orc.Memento example";
@@ -163,7 +163,6 @@ public class MainViewModel : CustomDragDropEnabledViewModel, IDisposable
     }
     #endregion
 
-    #region Methods
     protected override async Task InitializeAsync()
     {
         await base.InitializeAsync();
@@ -225,5 +224,4 @@ public class MainViewModel : CustomDragDropEnabledViewModel, IDisposable
         _disposed = true;
         Model.Dispose();
     }
-    #endregion
 }
