@@ -163,10 +163,6 @@ namespace Orc.Memento
         protected override void RedoAction() { }
         protected override void UndoAction() { }
     }
-    public static class OrcMementoModule
-    {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcMemento(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
-    }
     public class PropertyChangeUndo : Orc.Memento.UndoBase
     {
         public PropertyChangeUndo(object target, string propertyName, object? oldValue = null, object? newValue = null, object? tag = null) { }
@@ -187,5 +183,12 @@ namespace Orc.Memento
         protected abstract void RedoAction();
         public void Undo() { }
         protected abstract void UndoAction();
+    }
+}
+namespace Orc
+{
+    public static class OrcMementoModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcMemento(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
 }
