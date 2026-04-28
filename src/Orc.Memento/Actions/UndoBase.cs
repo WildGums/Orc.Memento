@@ -3,16 +3,14 @@
 using System;
 using Catel;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Base class for all classes implementing the <see cref="IMementoSupport" /> interface.
 /// </summary>
 public abstract class UndoBase : IMementoSupport
 {
-    /// <summary>
-    /// The log.
-    /// </summary>
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(UndoBase));
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UndoBase"/> class.
@@ -28,7 +26,7 @@ public abstract class UndoBase : IMementoSupport
         Tag = tag;
         Description = string.Empty;
 
-        Log.Debug("Constructed '{0}' undo/redo action for object of type '{0}' with tag '{1}'", GetType().Name, target.GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Constructed '{0}' undo/redo action for object of type '{0}' with tag '{1}'", GetType().Name, target.GetType().Name, TagHelper.ToString(Tag));
     }
 
     /// <summary>
@@ -60,11 +58,11 @@ public abstract class UndoBase : IMementoSupport
     /// </summary>
     public void Undo()
     {
-        Log.Debug("Undoing action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Undoing action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
 
         UndoAction();
 
-        Log.Debug("Undone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Undone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
     }
 
     /// <summary>
@@ -74,15 +72,15 @@ public abstract class UndoBase : IMementoSupport
     {
         if (!CanRedo)
         {
-            Log.Info("Cannot redo action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+            Logger.LogInformation("Cannot redo action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
             return;
         }
 
-        Log.Debug("Redoing action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Redoing action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
 
         RedoAction();
 
-        Log.Debug("Redone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Redone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
     }
 
     /// <summary>

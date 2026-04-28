@@ -6,58 +6,59 @@ using Catel.Logging;
 using Catel.MVVM;
 using GongSolutions.Wpf.DragDrop;
 using Memento;
+using Microsoft.Extensions.Logging;
 
 // https://github.com/punker76/gong-wpf-dragdrop/wiki/Usage
 public class CustomDragDropEnabledViewModel : ViewModelBase, IDragSource //, IDropTarget
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(CustomDragDropEnabledViewModel));
 
     protected readonly IMementoService _mementoService;
 
     private bool _operationSuccessFul;
 
-    public CustomDragDropEnabledViewModel(IMementoService mementoService)
+    public CustomDragDropEnabledViewModel(IServiceProvider serviceProvider, IMementoService mementoService)
+        : base(serviceProvider)
     {
         _mementoService = mementoService;
     }
 
-    #region IDragSource
     // dd:DragDrop.DragHandler="{Binding}"
 
     bool IDragSource.CanStartDrag(IDragInfo dragInfo)
     {
-        Log.Info("CanStartDrag");
+        Logger.LogInformation("CanStartDrag");
         return true;
     }
 
     void IDragSource.DragCancelled()
     {
-        Log.Info("DragCancelled");
+        Logger.LogInformation("DragCancelled");
         _operationSuccessFul = false;
     }
 
     void IDragSource.DragDropOperationFinished(DragDropEffects operationResult, IDragInfo dragInfo)
     {
         // will always called even if operation failed
-        Log.Info("DragDropOperationFinished");
+        Logger.LogInformation("DragDropOperationFinished");
 
         _mementoService.EndBatch();
         if ( !_operationSuccessFul)
         {
-            Log.Info("call undo");
+            Logger.LogInformation("call undo");
             _mementoService.Undo();
         }
     }
 
     void IDragSource.Dropped(IDropInfo dropInfo)
     {
-        Log.Info("Dropped");
+        Logger.LogInformation("Dropped");
         _operationSuccessFul = true;
     }
 
     void IDragSource.StartDrag(IDragInfo dragInfo)
     {
-        Log.Info("StartDrag");
+        Logger.LogInformation("StartDrag");
         _mementoService.BeginBatch("Drag & Drop");
 
         dragInfo.Effects = DragDropEffects.Move | DragDropEffects.Copy;
@@ -66,11 +67,10 @@ public class CustomDragDropEnabledViewModel : ViewModelBase, IDragSource //, IDr
 
     bool IDragSource.TryCatchOccurredException(Exception exception)
     {
-        Log.Info("TryCatchOccurredException");
+        Logger.LogInformation("TryCatchOccurredException");
         _operationSuccessFul = false;
 
         // we have handled the exception
         return true;
     }
-    #endregion
 }

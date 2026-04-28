@@ -2,9 +2,19 @@
 
 using System.Globalization;
 using System.Windows;
+using Catel;
 using Catel.IoC;
-using Catel.Logging;
 using Catel.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Orc.Automation;
+using Orc.Controls;
+using Orc.FileSystem;
+using Orc.Memento.Example.Views;
+using Orc.Serialization.Json;
+using Orc.SystemInfo;
+using Orc.Theming;
 using Orchestra;
 
 /// <summary>
@@ -12,16 +22,47 @@ using Orchestra;
 /// </summary>
 public partial class App : Application
 {
+#pragma warning disable IDISP006 // Implement IDisposable
+    private readonly IHost _host;
+#pragma warning restore IDISP006 // Implement IDisposable
+
     public App()
     {
-#if DEBUG
-        LogManager.AddDebugListener(false);
-#endif
+        var hostBuilder = new HostBuilder()
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddCatelCore();
+                services.AddCatelMvvm();
+                services.AddOrcAutomation();
+                services.AddOrcControls();
+                services.AddOrcFileSystem();
+                services.AddOrcMemento();
+                services.AddOrcSerializationJson();
+                services.AddOrcSystemInfo();
+                services.AddOrcTheming();
+                services.AddOrchestraCore();
+
+                services.AddLogging(x =>
+                {
+                    x.AddConsole();
+                    x.AddDebug();
+                });
+            });
+
+        _host = hostBuilder.Build();
+
+        IoCContainer.ServiceProvider = _host.Services;
     }
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
-        var languageService = ServiceLocator.Default.ResolveRequiredType<ILanguageService>();
+        base.OnStartup(e);
+
+        var serviceProvider = IoCContainer.ServiceProvider;
+
+        serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
+
+        var languageService = serviceProvider.GetRequiredService<ILanguageService>();
 
         // Note: it's best to use .CurrentUICulture in actual apps since it will use the preferred language
         // of the user. But in order to demo multilingual features for devs (who mostly have en-US as .CurrentUICulture),
@@ -29,8 +70,19 @@ public partial class App : Application
         languageService.PreferredCulture = CultureInfo.CurrentCulture;
         languageService.FallbackCulture = new CultureInfo("en-US");
 
-        base.OnStartup(e);
-
         this.ApplyTheme();
+
+        var mainWindow = ActivatorUtilities.CreateInstance<MainWindow>(_host.Services);
+        mainWindow.Show();
+    }
+
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        using (_host)
+        {
+            await _host.StopAsync();
+        }
+
+        base.OnExit(e);
     }
 }

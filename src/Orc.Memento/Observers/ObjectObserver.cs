@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Catel;
 using Catel.Data;
-using Catel.IoC;
 using Catel.Logging;
 using Catel.Reflection;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Observer that will observe changes of the the object injected into this observer. Each change will automatically
@@ -15,11 +15,8 @@ using Catel.Reflection;
 /// </summary>
 public class ObjectObserver : ObserverBase
 {
-    /// <summary>
-    /// The log.
-    /// </summary>
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
- 
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(ObjectObserver));
+
     /// <summary>
     /// Collection containing the previous values of the object.
     /// </summary>
@@ -31,24 +28,24 @@ public class ObjectObserver : ObserverBase
     /// Initializes a new instance of the <see cref="ObjectObserver"/> class.
     /// </summary>
     /// <param name="propertyChanged">The property changed.</param>
+    /// <param name="mementoService">The memento service.</param>
     /// <param name="tag">The tag.</param>
-    /// <param name="mementoService">The memento service. If <c>null</c>, the service will be retrieved from the <see cref="IServiceLocator"/>.</param>
     /// <exception cref="ArgumentNullException">The <paramref name="propertyChanged"/> is <c>null</c>.</exception>
-    public ObjectObserver(INotifyPropertyChanged propertyChanged, object? tag = null, IMementoService? mementoService = null)
-        : base(tag, mementoService)
+    public ObjectObserver(INotifyPropertyChanged propertyChanged, IMementoService mementoService, object? tag)
+        : base(mementoService, tag)
     {
         ArgumentNullException.ThrowIfNull(propertyChanged);
 
         var propertyChangedType = propertyChanged.GetType();
 
-        Log.Debug("Initializing ObjectObserver for type '{0}'", propertyChangedType.Name);
+        Logger.LogDebug("Initializing ObjectObserver for type '{0}'", propertyChangedType.Name);
 
         _object = propertyChanged;
         _object.PropertyChanged += OnPropertyChanged;
 
         InitializeDefaultValues(propertyChanged);
 
-        Log.Debug("Initialized ObjectObserver for type '{0}'", propertyChangedType.Name);
+        Logger.LogDebug("Initialized ObjectObserver for type '{0}'", propertyChangedType.Name);
     }
 
     /// <summary>
@@ -150,7 +147,7 @@ public class ObjectObserver : ObserverBase
         var ignore = propertyInfo.IsDecoratedWithAttribute<IgnoreMementoSupportAttribute>();
         if (ignore)
         {
-            Log.Debug("Ignored property '{0}' because it is decorated with the IgnoreMementoSupportAttribute", propertyName);
+            Logger.LogDebug("Ignored property '{0}' because it is decorated with the IgnoreMementoSupportAttribute", propertyName);
         }
 
         return ignore;
@@ -161,7 +158,7 @@ public class ObjectObserver : ObserverBase
     /// </summary>
     public override void CancelSubscription()
     {
-        Log.Debug("Canceling property change subscription");
+        Logger.LogDebug("Canceling property change subscription");
 
         if (_object is not null)
         {
@@ -171,6 +168,6 @@ public class ObjectObserver : ObserverBase
 
         _previousPropertyValues.Clear();
 
-        Log.Debug("Canceled property change subscription");
+        Logger.LogDebug("Canceled property change subscription");
     }
 }
