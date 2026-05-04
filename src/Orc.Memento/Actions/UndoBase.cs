@@ -26,7 +26,7 @@ public abstract class UndoBase : IMementoSupport
         Tag = tag;
         Description = string.Empty;
 
-        Logger.LogDebug("Constructed '{0}' undo/redo action for object of type '{0}' with tag '{1}'", GetType().Name, target.GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Constructed '{ActionType}' undo/redo action for object of type '{TargetType}' with tag '{Tag}'", GetType().Name, target.GetType().Name, TagHelper.ToString(Tag));
     }
 
     /// <summary>
@@ -58,11 +58,11 @@ public abstract class UndoBase : IMementoSupport
     /// </summary>
     public void Undo()
     {
-        Logger.LogDebug("Undoing action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Undoing action '{ActionType}' for object with tag '{Tag}'", GetType().Name, TagHelper.ToString(Tag));
 
         UndoAction();
 
-        Logger.LogDebug("Undone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Undone action '{ActionType}' for object with tag '{Tag}'", GetType().Name, TagHelper.ToString(Tag));
     }
 
     /// <summary>
@@ -72,15 +72,15 @@ public abstract class UndoBase : IMementoSupport
     {
         if (!CanRedo)
         {
-            Logger.LogInformation("Cannot redo action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+            Logger.LogInformation("Cannot redo action '{ActionType}' for object with tag '{Tag}'", GetType().Name, TagHelper.ToString(Tag));
             return;
         }
 
-        Logger.LogDebug("Redoing action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Redoing action '{ActionType}' for object with tag '{Tag}'", GetType().Name, TagHelper.ToString(Tag));
 
         RedoAction();
 
-        Logger.LogDebug("Redone action '{0}' for object with tag '{1}'", GetType().Name, TagHelper.ToString(Tag));
+        Logger.LogDebug("Redone action '{ActionType}' for object with tag '{Tag}'", GetType().Name, TagHelper.ToString(Tag));
     }
 
     /// <summary>

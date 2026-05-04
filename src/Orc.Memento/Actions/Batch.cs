@@ -154,7 +154,7 @@ public class Batch : IMementoBatch, IUniqueIdentifyable
     {
         ArgumentNullException.ThrowIfNull(obj);
 
-        Logger.LogDebug("Clearing actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
+        Logger.LogDebug("Clearing actions for object of type '{TypeName}' in batch '{UniqueIdentifier}'", obj.GetType().Name, UniqueIdentifier);
 
         var temp = new List<IMementoSupport>(_actions.Where(operation => operation.Target == obj));
 
@@ -163,6 +163,6 @@ public class Batch : IMementoBatch, IUniqueIdentifyable
             _actions.Remove(operation);
         }
 
-        Logger.LogDebug("Cleared actions for object of type '{0}' in batch '{1}'", obj.GetType().Name, UniqueIdentifier);
+        Logger.LogDebug("Cleared actions for object of type '{TypeName}' in batch '{UniqueIdentifier}'", obj.GetType().Name, UniqueIdentifier);
     }
 }
