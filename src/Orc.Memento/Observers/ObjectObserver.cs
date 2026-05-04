@@ -38,14 +38,14 @@ public class ObjectObserver : ObserverBase
 
         var propertyChangedType = propertyChanged.GetType();
 
-        Logger.LogDebug("Initializing ObjectObserver for type '{0}'", propertyChangedType.Name);
+        Logger.LogDebug("Initializing ObjectObserver for type '{TypeName}'", propertyChangedType.Name);
 
         _object = propertyChanged;
         _object.PropertyChanged += OnPropertyChanged;
 
         InitializeDefaultValues(propertyChanged);
 
-        Logger.LogDebug("Initialized ObjectObserver for type '{0}'", propertyChangedType.Name);
+        Logger.LogDebug("Initialized ObjectObserver for type '{TypeName}'", propertyChangedType.Name);
     }
 
     /// <summary>
@@ -147,7 +147,7 @@ public class ObjectObserver : ObserverBase
         var ignore = propertyInfo.IsDecoratedWithAttribute<IgnoreMementoSupportAttribute>();
         if (ignore)
         {
-            Logger.LogDebug("Ignored property '{0}' because it is decorated with the IgnoreMementoSupportAttribute", propertyName);
+            Logger.LogDebug("Ignored property '{PropertyName}' because it is decorated with the IgnoreMementoSupportAttribute", propertyName);
         }
 
         return ignore;

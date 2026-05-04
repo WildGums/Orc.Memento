@@ -52,7 +52,7 @@ public class MementoService : IMementoService
         MaximumSupportedBatches = maximumSupportedBatches;
         IsEnabled = true;
 
-        Logger.LogDebug("Initialized MementoService with {0} supported batches", maximumSupportedBatches);
+        Logger.LogDebug("Initialized MementoService with {MaximumSupportedBatches} supported batches", maximumSupportedBatches);
     }
 
     /// <summary>
@@ -182,7 +182,7 @@ public class MementoService : IMementoService
             Description = description
         };
 
-        Logger.LogDebug("Starting batch with title '{0}' and description '{1}'", ObjectToStringHelper.ToString(batch.Title),
+        Logger.LogDebug("Starting batch with title '{Title}' and description '{Description}'", ObjectToStringHelper.ToString(batch.Title),
             ObjectToStringHelper.ToString(batch.Description));
 
         _currentBatch = batch;
@@ -209,7 +209,7 @@ public class MementoService : IMementoService
 
         _currentBatch = null;
 
-        Logger.LogDebug("Ended batch with title '{0}' and description '{1}' with '{2}' actions", ObjectToStringHelper.ToString(batch.Title),
+        Logger.LogDebug("Ended batch with title '{Title}' and description '{Description}' with '{ActionCount}' actions", ObjectToStringHelper.ToString(batch.Title),
             ObjectToStringHelper.ToString(batch.Description), batch.ActionCount);
 
         return batch;
@@ -424,7 +424,7 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(instance);
 
-        Logger.LogDebug("Registering object of type '{0}' with tag '{1}'", instance.GetType().Name, TagHelper.ToString(tag));
+        Logger.LogDebug("Registering object of type '{TypeName}' with tag '{Tag}'", instance.GetType().Name, TagHelper.ToString(tag));
 
         if (!_observers.ContainsKey(instance))
         {
@@ -447,7 +447,7 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(instance);
 
-        Logger.LogDebug("Unregistering object of type '{0}'", instance.GetType().Name);
+        Logger.LogDebug("Unregistering object of type '{TypeName}'", instance.GetType().Name);
 
         ClearActionsForObject(instance);
 
@@ -475,7 +475,7 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(collection);
 
-        Logger.LogDebug("Registering collection of type '{0}' with tag '{1}'", collection.GetType().Name, TagHelper.ToString(tag));
+        Logger.LogDebug("Registering collection of type '{TypeName}' with tag '{Tag}'", collection.GetType().Name, TagHelper.ToString(tag));
 
         if (!_observers.ContainsKey(collection))
         {
@@ -498,7 +498,7 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(collection);
 
-        Logger.LogDebug("Unregistering collection of type '{0}'", collection.GetType().Name);
+        Logger.LogDebug("Unregistering collection of type '{TypeName}'", collection.GetType().Name);
 
         ClearActionsForObject(collection);
 
@@ -524,7 +524,7 @@ public class MementoService : IMementoService
     {
         ArgumentNullException.ThrowIfNull(obj);
 
-        Logger.LogDebug("Clearing actions for object of type '{0}'", obj.GetType().Name);
+        Logger.LogDebug("Clearing actions for object of type '{TypeName}'", obj.GetType().Name);
 
         lock (_lock)
         {
@@ -532,7 +532,7 @@ public class MementoService : IMementoService
             ClearActionsForObjectList(_redoBatches, obj);
         }
 
-        Logger.LogDebug("Cleared actions for object of type '{0}'", obj.GetType().Name);
+        Logger.LogDebug("Cleared actions for object of type '{TypeName}'", obj.GetType().Name);
     }
 
     /// <summary>
